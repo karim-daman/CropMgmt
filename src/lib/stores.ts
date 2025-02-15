@@ -154,8 +154,12 @@ export async function loadStores() {
 	}
 }
 
+let initialized = false;
+
 // Initialize stores with data from files
 export async function initializeStores() {
+	if (initialized) return;
+
 	try {
 		const { achatsData, clientsData, entretiensData, livraisonsData, pointagesData } =
 			await loadStores();
@@ -176,4 +180,6 @@ export async function initializeStores() {
 	} catch (error) {
 		console.error('Error initializing stores:', error);
 	}
+
+	initialized = true;
 }

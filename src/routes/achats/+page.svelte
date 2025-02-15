@@ -39,7 +39,9 @@
 		{#each companies as company}
 			<button
 				on:click={() => (selectedCompany = company)}
-				class="pressable rounded border px-4 py-2"
+				class="pressable rounded border px-4 py-2 {selectedCompany === company
+					? 'bg-blue-500 text-white'
+					: ''} "
 				class:selected={selectedCompany === company}
 			>
 				{company}

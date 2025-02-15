@@ -8,7 +8,7 @@
 </script>
 
 <nav
-	class="mx-auto mb-5 mt-2 block w-full max-w-screen-lg rounded-md bg-slate-100 px-4 py-2 shadow-md lg:px-8"
+	class="mx-auto mt-2 mb-5 block w-full max-w-screen-lg rounded-md bg-slate-100 px-4 py-2 shadow-md lg:px-8"
 >
 	<div class="container mx-auto flex flex-wrap items-center justify-between text-slate-800">
 		<div>
@@ -18,7 +18,7 @@
 					selected = '/';
 				}}
 				href="/"
-				class="  {selected == '/'
+				class="{selected == '/'
 					? 'bg-slate-700 text-white '
 					: ''} pressable mr-4 block cursor-pointer rounded-sm p-1 text-base font-semibold text-slate-600 hover:bg-slate-700 hover:text-white"
 			>
@@ -41,7 +41,7 @@
 
 		<!-- Desktop Navigation -->
 		<div class="hidden md:block">
-			<ul class="mb-4 mt-2 flex flex-col gap-2 md:mb-0 md:flex-row md:items-center md:gap-6">
+			<ul class="mt-2 mb-4 flex flex-col gap-2 md:mb-0 md:flex-row md:items-center md:gap-6">
 				<li
 					class="pressable flex items-center gap-x-2 rounded-sm p-1 text-sm text-slate-600 hover:bg-slate-700 hover:text-white {selected ==
 					'achats'
@@ -53,7 +53,7 @@
 							selected = 'achats';
 						}}
 						href="/achats"
-						class="w-22 flex items-center gap-x-1"
+						class="flex w-22 items-center gap-x-1"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +84,7 @@
 							selected = 'clients';
 						}}
 						href="/clients"
-						class="w-22 flex items-center gap-x-1"
+						class="flex w-22 items-center gap-x-1"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+								d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
 							/>
 						</svg>
 
@@ -115,7 +115,7 @@
 							selected = 'entretien';
 						}}
 						href="/entretien"
-						class="w-22 flex items-center gap-x-1"
+						class="flex w-22 items-center gap-x-1"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +146,7 @@
 							selected = 'pointage';
 						}}
 						href="/pointage"
-						class="w-22 flex items-center gap-x-1"
+						class="flex w-22 items-center gap-x-1"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -177,7 +177,7 @@
 							selected = 'livraison';
 						}}
 						href="/livraison"
-						class="w-22 flex items-center gap-x-1"
+						class="flex w-22 items-center gap-x-1"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -202,11 +202,11 @@
 		<!-- Mobile Menu Button -->
 		<button
 			onclick={toggleLinks}
-			class="relative ml-auto h-10 w-10 select-none rounded-lg text-center align-middle transition-all hover:bg-gray-100 md:hidden"
+			class="relative ml-auto h-10 w-10 rounded-lg text-center align-middle transition-all select-none hover:bg-gray-100 md:hidden"
 			type="button"
 			aria-label="Toggle navigation menu"
 		>
-			<span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
+			<span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="size-6"
