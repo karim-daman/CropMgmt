@@ -15,6 +15,9 @@
 	"/livraison": [
 		"src/routes/+layout.ts"
 	],
+	"/livraison/[id]": [
+		"src/routes/+layout.ts"
+	],
 	"/pointage": [
 		"src/routes/+layout.ts"
 	]
