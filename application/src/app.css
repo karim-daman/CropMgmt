@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+.pressable {
+	@apply transition active:translate-y-1 active:scale-95 active:transform;
+}
+
+.transit {
+	@apply transition duration-100 ease-in-out;
+}
+
+.appear {
+	@apply scale-100 opacity-100;
+}
+
+.disappear {
+	@apply pointer-events-none scale-95 opacity-0;
+}
