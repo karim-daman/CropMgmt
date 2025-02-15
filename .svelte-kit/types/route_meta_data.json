@@ -1,0 +1,21 @@
+{
+	"/": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.ts"
+	],
+	"/achats": [
+		"src/routes/+layout.ts"
+	],
+	"/clients": [
+		"src/routes/+layout.ts"
+	],
+	"/entretien": [
+		"src/routes/+layout.ts"
+	],
+	"/livraison": [
+		"src/routes/+layout.ts"
+	],
+	"/pointage": [
+		"src/routes/+layout.ts"
+	]
+}
