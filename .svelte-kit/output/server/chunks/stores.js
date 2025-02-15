@@ -1,17 +1,17 @@
 import { w as writable } from "./index2.js";
 import "@tauri-apps/plugin-fs";
-const achats = writable({
-  Cnh: [],
-  Goweil: [],
-  General: []
-});
-const clients = writable();
-const entretiens = writable({
-  Cnh: [],
-  Goweil: []
-});
-const livraisons = writable();
-const pointages = writable();
+const achats = writable([
+  { name: "Cnh", cards: [] },
+  { name: "Goweil", cards: [] },
+  { name: "General", cards: [] }
+]);
+const entretiens = writable([
+  { name: "Cnh", cards: [] },
+  { name: "Goweil", cards: [] }
+]);
+const clients = writable([]);
+const livraisons = writable([]);
+const pointages = writable([]);
 export {
   achats as a,
   clients as c,
