@@ -1,7 +1,5 @@
-import { Y as ensure_array_like, T as stringify, S as pop, P as push } from "../../chunks/index.js";
-import { a as attr } from "../../chunks/attributes.js";
+import { a2 as ensure_array_like, _ as attr, X as escape_html, a0 as stringify, T as pop, Q as push } from "../../chunks/index.js";
 import "@tauri-apps/plugin-fs";
-import { e as escape_html } from "../../chunks/escaping.js";
 function _page($$payload, $$props) {
   push();
   let stats = [];

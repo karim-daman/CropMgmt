@@ -35,7 +35,6 @@ export type LivraisonRow = {
 	};
 	Source: string;
 	Destination: string;
-	Article: string;
 	UnitPrice: number;
 	Quantity: number;
 	Total: number;

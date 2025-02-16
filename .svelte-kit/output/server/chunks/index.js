@@ -1,4 +1,4 @@
-import "clsx";
+import { clsx as clsx$1 } from "clsx";
 const BROWSER = false;
 var is_array = Array.isArray;
 var index_of = Array.prototype.indexOf;
@@ -7,6 +7,11 @@ var define_property = Object.defineProperty;
 var get_descriptor = Object.getOwnPropertyDescriptor;
 const noop = () => {
 };
+function run_all(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    arr[i]();
+  }
+}
 const DERIVED = 1 << 1;
 const EFFECT = 1 << 2;
 const RENDER_EFFECT = 1 << 3;
@@ -50,6 +55,8 @@ let tracing_mode_flag = false;
 const HYDRATION_START = "[";
 const HYDRATION_END = "]";
 const HYDRATION_ERROR = {};
+const ELEMENT_IS_NAMESPACED = 1;
+const ELEMENT_PRESERVE_ATTRIBUTE_CASE = 1 << 1;
 function lifecycle_outside_component(name) {
   {
     throw new Error(`https://svelte.dev/e/lifecycle_outside_component`);
@@ -886,9 +893,83 @@ const STATUS_MASK = -7169;
 function set_signal_status(signal, status) {
   signal.f = signal.f & STATUS_MASK | status;
 }
+const DOM_BOOLEAN_ATTRIBUTES = [
+  "allowfullscreen",
+  "async",
+  "autofocus",
+  "autoplay",
+  "checked",
+  "controls",
+  "default",
+  "disabled",
+  "formnovalidate",
+  "hidden",
+  "indeterminate",
+  "inert",
+  "ismap",
+  "loop",
+  "multiple",
+  "muted",
+  "nomodule",
+  "novalidate",
+  "open",
+  "playsinline",
+  "readonly",
+  "required",
+  "reversed",
+  "seamless",
+  "selected",
+  "webkitdirectory",
+  "defer",
+  "disablepictureinpicture",
+  "disableremoteplayback"
+];
+function is_boolean_attribute(name) {
+  return DOM_BOOLEAN_ATTRIBUTES.includes(name);
+}
+const PASSIVE_EVENTS = ["touchstart", "touchmove"];
+function is_passive_event(name) {
+  return PASSIVE_EVENTS.includes(name);
+}
+const ATTR_REGEX = /[&"<]/g;
+const CONTENT_REGEX = /[&<]/g;
+function escape_html(value, is_attr) {
+  const str = String(value ?? "");
+  const pattern = is_attr ? ATTR_REGEX : CONTENT_REGEX;
+  pattern.lastIndex = 0;
+  let escaped = "";
+  let last = 0;
+  while (pattern.test(str)) {
+    const i = pattern.lastIndex - 1;
+    const ch = str[i];
+    escaped += str.substring(last, i) + (ch === "&" ? "&amp;" : ch === '"' ? "&quot;" : "&lt;");
+    last = i + 1;
+  }
+  return escaped + str.substring(last);
+}
+const replacements = {
+  translate: /* @__PURE__ */ new Map([
+    [true, "yes"],
+    [false, "no"]
+  ])
+};
+function attr(name, value, is_boolean = false) {
+  if (value == null || !value && is_boolean || value === "" && name === "class") return "";
+  const normalized = name in replacements && replacements[name].get(value) || value;
+  const assignment = is_boolean ? "" : `="${escape_html(normalized, true)}"`;
+  return ` ${name}${assignment}`;
+}
+function clsx(value) {
+  if (typeof value === "object") {
+    return clsx$1(value);
+  } else {
+    return value ?? "";
+  }
+}
 function subscribe_to_store(store, run, invalidate) {
   if (store == null) {
     run(void 0);
+    if (invalidate) invalidate(void 0);
     return noop;
   }
   const unsub = untrack(
@@ -946,6 +1027,7 @@ function get_parent_context(component_context2) {
 }
 const BLOCK_OPEN = `<!--${HYDRATION_START}-->`;
 const BLOCK_CLOSE = `<!--${HYDRATION_END}-->`;
+const INVALID_ATTR_NAME_CHAR_REGEX = /[\s'">/=\u{FDD0}-\u{FDEF}\u{FFFE}\u{FFFF}\u{1FFFE}\u{1FFFF}\u{2FFFE}\u{2FFFF}\u{3FFFE}\u{3FFFF}\u{4FFFE}\u{4FFFF}\u{5FFFE}\u{5FFFF}\u{6FFFE}\u{6FFFF}\u{7FFFE}\u{7FFFF}\u{8FFFE}\u{8FFFF}\u{9FFFE}\u{9FFFF}\u{AFFFE}\u{AFFFF}\u{BFFFE}\u{BFFFF}\u{CFFFE}\u{CFFFF}\u{DFFFE}\u{DFFFF}\u{EFFFE}\u{EFFFF}\u{FFFFE}\u{FFFFF}\u{10FFFE}\u{10FFFF}]/u;
 let on_destroy = [];
 function props_id_generator() {
   let uid = 1;
@@ -983,8 +1065,81 @@ function render(component, options = {}) {
     body: payload.out
   };
 }
+function spread_attributes(attrs, classes, styles, flags = 0) {
+  if (attrs.class) {
+    attrs.class = clsx(attrs.class);
+  }
+  if (classes) {
+    const classlist = attrs.class ? [attrs.class] : [];
+    for (const key in classes) {
+      if (classes[key]) {
+        classlist.push(key);
+      }
+    }
+    attrs.class = classlist.join(" ");
+  }
+  let attr_str = "";
+  let name;
+  const is_html = (flags & ELEMENT_IS_NAMESPACED) === 0;
+  const lowercase = (flags & ELEMENT_PRESERVE_ATTRIBUTE_CASE) === 0;
+  for (name in attrs) {
+    if (typeof attrs[name] === "function") continue;
+    if (name[0] === "$" && name[1] === "$") continue;
+    if (INVALID_ATTR_NAME_CHAR_REGEX.test(name)) continue;
+    var value = attrs[name];
+    if (lowercase) {
+      name = name.toLowerCase();
+    }
+    attr_str += attr(name, value, is_html && is_boolean_attribute(name));
+  }
+  return attr_str;
+}
+function spread_props(props) {
+  const merged_props = {};
+  let key;
+  for (let i = 0; i < props.length; i++) {
+    const obj = props[i];
+    for (key in obj) {
+      const desc = Object.getOwnPropertyDescriptor(obj, key);
+      if (desc) {
+        Object.defineProperty(merged_props, key, desc);
+      } else {
+        merged_props[key] = obj[key];
+      }
+    }
+  }
+  return merged_props;
+}
 function stringify(value) {
   return typeof value === "string" ? value : value == null ? "" : value + "";
+}
+function style_object_to_string(style_object) {
+  return Object.keys(style_object).filter(
+    /** @param {any} key */
+    (key) => style_object[key] != null && style_object[key] !== ""
+  ).map(
+    /** @param {any} key */
+    (key) => `${key}: ${escape_html(style_object[key], true)};`
+  ).join(" ");
+}
+function add_styles(style_object) {
+  const styles = style_object_to_string(style_object);
+  return styles ? ` style="${styles}"` : "";
+}
+function merge_styles(attribute, styles) {
+  var merged = {};
+  if (attribute) {
+    for (var declaration of attribute.split(";")) {
+      var i = declaration.indexOf(":");
+      var name = declaration.slice(0, i).trim();
+      var value = declaration.slice(i + 1).trim();
+      if (name !== "") merged[name] = value;
+    }
+  }
+  for (name in styles) {
+    merged[name] = styles[name];
+  }
+  return merged;
 }
 function store_get(store_values, store_name, store) {
   if (store_name in store_values && store_values[store_name][0] === store) {
@@ -1021,34 +1176,44 @@ function ensure_array_like(array_like_or_iterator) {
   return [];
 }
 export {
+  merge_styles as $,
   component_root as A,
   BROWSER as B,
   CLEAN as C,
   DIRTY as D,
-  create_text as E,
-  branch as F,
-  push$1 as G,
+  is_passive_event as E,
+  create_text as F,
+  branch as G,
   HYDRATION_ERROR as H,
-  component_context as I,
-  pop$1 as J,
-  get as K,
+  push$1 as I,
+  component_context as J,
+  pop$1 as K,
   LEGACY_PROPS as L,
   MAYBE_DIRTY as M,
-  flush_sync as N,
-  render as O,
-  push as P,
-  setContext as Q,
+  get as N,
+  flush_sync as O,
+  render as P,
+  push as Q,
   ROOT_EFFECT as R,
-  pop as S,
-  stringify as T,
+  setContext as S,
+  pop as T,
   UNOWNED as U,
-  slot as V,
-  getContext as W,
-  noop as X,
-  ensure_array_like as Y,
-  store_get as Z,
-  unsubscribe_stores as _,
+  current_component as V,
+  add_styles as W,
+  escape_html as X,
+  spread_props as Y,
+  spread_attributes as Z,
+  attr as _,
   DERIVED as a,
+  stringify as a0,
+  store_get as a1,
+  ensure_array_like as a2,
+  unsubscribe_stores as a3,
+  slot as a4,
+  getContext as a5,
+  noop as a6,
+  subscribe_to_store as a7,
+  run_all as a8,
   schedule_effect as b,
   active_reaction as c,
   is_runes as d,

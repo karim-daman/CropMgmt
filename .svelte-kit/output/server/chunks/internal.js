@@ -1,4 +1,4 @@
-import { i as increment_write_version, D as DIRTY, s as set_signal_status, C as CLEAN, U as UNOWNED, a as DERIVED, b as schedule_effect, c as active_reaction, u as untracking, d as is_runes, e as BLOCK_EFFECT, f as derived_sources, g as state_unsafe_mutation, h as active_effect, j as BRANCH_EFFECT, R as ROOT_EFFECT, k as untracked_writes, l as set_untracked_writes, M as MAYBE_DIRTY, H as HYDRATION_ERROR, m as get_next_sibling, n as define_property, o as set_active_reaction, p as set_active_effect, q as is_array, r as init_operations, t as get_first_child, v as HYDRATION_START, w as HYDRATION_END, x as hydration_failed, y as clear_text_content, z as array_from, A as component_root, E as create_text, F as branch, G as push, I as component_context, J as pop, L as LEGACY_PROPS, K as get, N as flush_sync, O as render, P as push$1, Q as setContext, S as pop$1 } from "./index.js";
+import { i as increment_write_version, D as DIRTY, s as set_signal_status, C as CLEAN, U as UNOWNED, a as DERIVED, b as schedule_effect, c as active_reaction, u as untracking, d as is_runes, e as BLOCK_EFFECT, f as derived_sources, g as state_unsafe_mutation, h as active_effect, j as BRANCH_EFFECT, R as ROOT_EFFECT, k as untracked_writes, l as set_untracked_writes, M as MAYBE_DIRTY, H as HYDRATION_ERROR, m as get_next_sibling, n as define_property, o as set_active_reaction, p as set_active_effect, q as is_array, r as init_operations, t as get_first_child, v as HYDRATION_START, w as HYDRATION_END, x as hydration_failed, y as clear_text_content, z as array_from, A as component_root, E as is_passive_event, F as create_text, G as branch, I as push, J as component_context, K as pop, L as LEGACY_PROPS, N as get, O as flush_sync, P as render, Q as push$1, S as setContext, T as pop$1 } from "./index.js";
 import { s as safe_equals, e as equals } from "./equality.js";
 import "clsx";
 let base = "";
@@ -117,10 +117,6 @@ function hydrate_next() {
     /** @type {TemplateNode} */
     get_next_sibling(hydrate_node)
   );
-}
-const PASSIVE_EVENTS = ["touchstart", "touchmove"];
-function is_passive_event(name) {
-  return PASSIVE_EVENTS.includes(name);
 }
 const all_registered_events = /* @__PURE__ */ new Set();
 const root_event_handles = /* @__PURE__ */ new Set();
@@ -620,7 +616,7 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1le9l09"
+  version_hash: "pgavy7"
 };
 async function get_hooks() {
   let handle;

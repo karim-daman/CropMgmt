@@ -45,7 +45,7 @@
 </a>
 
 <div class="my-8 bg-white p-8">
-	<h1 class="mb-32 text-center text-3xl font-bold text-gray-800">Bon De Livraison</h1>
+	<h1 class="mt-20 mb-32 text-center text-3xl font-bold text-gray-800">Bon De Livraison</h1>
 
 	<div class="mb-6 grid grid-cols-2 gap-72">
 		<div>
@@ -103,7 +103,7 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td class="border-t p-2">{findLivraisonById(page.params.id)?.Article}</td>
+				<td class="border-t p-2">Botte Ensilage</td>
 				<td class="border-t p-2 text-right"
 					>${findLivraisonById(page.params.id)?.UnitPrice.toFixed(2)}</td
 				>

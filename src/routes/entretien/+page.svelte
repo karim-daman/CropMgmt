@@ -2,6 +2,7 @@
 	import toast from 'svelte-5-french-toast';
 	import { entretiens } from '../../lib/stores';
 	import { type Card } from '../../lib/types';
+	import DeleteModal from './deleteModal.svelte';
 
 	let selectedCompany: 'Cnh' | 'Goweil' = 'Cnh'; // Explicitly type selectedCompany
 	const companies = ['Cnh', 'Goweil'];
@@ -15,11 +16,15 @@
 	};
 
 	function addCard() {
+		if (!selectedCompany || !newCard.description || !newCard.dueDate) {
+			toast.error('Please fill in all required fields (company, description, and due date).', {
+				position: 'top-right'
+			});
+			return;
+		}
+
 		newCard.id = Date.now();
 		newCard.timestamp = new Date().toString();
-
-		// Add the new card to the selected company's array
-		// $entretiens[selectedCompany] = [...$entretiens[selectedCompany], { ...newCard }];
 
 		$entretiens = {
 			...$entretiens,
@@ -36,15 +41,6 @@
 		};
 
 		toast.success('Added a new card.', {
-			position: 'top-right'
-		});
-	}
-
-	function deleteCard(id: number) {
-		// Remove the card from the selected company's array
-		$entretiens[selectedCompany] = $entretiens[selectedCompany].filter((card) => card.id !== id);
-
-		toast.success('Removed a card.', {
 			position: 'top-right'
 		});
 	}
@@ -127,9 +123,8 @@
 					<span class="text-sm text-gray-500">
 						{new Date(card.timestamp).toLocaleString()}
 					</span>
-					<button on:click={() => deleteCard(card.id)} class="text-red-500 hover:text-red-700">
-						×
-					</button>
+
+					<DeleteModal {selectedCompany} ID={card.id} />
 				</div>
 				<p class="mb-2">{card.description}</p>
 				<div class="flex items-center justify-between">

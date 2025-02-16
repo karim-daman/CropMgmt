@@ -1,5 +1,5 @@
-import { w as writable } from "./index2.js";
 import "@tauri-apps/plugin-fs";
+import { w as writable } from "./index2.js";
 const achats = writable([
   { name: "Cnh", cards: [] },
   { name: "Goweil", cards: [] },

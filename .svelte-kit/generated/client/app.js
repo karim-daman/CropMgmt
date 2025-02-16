@@ -20,7 +20,7 @@ export const dictionary = {
 		"/clients": [4],
 		"/entretien": [5],
 		"/livraison": [6],
-		"/livraison/[id]": [7],
+		"/livraison/[id]": [~7],
 		"/pointage": [8]
 	};
 
