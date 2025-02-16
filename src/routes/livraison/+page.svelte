@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { livraisons, type LivraisonRow } from '../../lib/stores';
+	import toast from 'svelte-5-french-toast';
+	import { livraisons } from '../../lib/stores';
+	import { type LivraisonRow } from '../../lib/types';
 
 	let newRow: LivraisonRow = {
 		ID: '',
@@ -40,10 +42,17 @@
 			Quantity: 0,
 			Total: 0
 		};
+
+		toast.success('Added a new bon livraison.', {
+			position: 'top-right'
+		});
 	}
 
 	function deleteRow(id: string) {
 		$livraisons = $livraisons.filter((row) => row.ID !== id);
+		toast.success('Removed a livraison.', {
+			position: 'top-right'
+		});
 	}
 	function editRow() {}
 </script>

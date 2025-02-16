@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { entretiens, type Card } from '../../lib/stores';
+	import toast from 'svelte-5-french-toast';
+	import { entretiens } from '../../lib/stores';
+	import { type Card } from '../../lib/types';
 
 	let selectedCompany: 'Cnh' | 'Goweil' = 'Cnh'; // Explicitly type selectedCompany
 	const companies = ['Cnh', 'Goweil'];
@@ -32,11 +34,19 @@
 			status: 'open',
 			description: ''
 		};
+
+		toast.success('Added a new card.', {
+			position: 'top-right'
+		});
 	}
 
 	function deleteCard(id: number) {
 		// Remove the card from the selected company's array
 		$entretiens[selectedCompany] = $entretiens[selectedCompany].filter((card) => card.id !== id);
+
+		toast.success('Removed a card.', {
+			position: 'top-right'
+		});
 	}
 
 	function updateStatus(id: number, status: Card['status']) {

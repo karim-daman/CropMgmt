@@ -8,8 +8,11 @@
 <script lang="ts">
 	import '../app.css';
 	import { page } from '$app/stores';
+	import { Toaster } from 'svelte-5-french-toast';
 	import Navbar from './components/navbar.svelte';
 </script>
+
+<Toaster />
 
 <Navbar />
 
