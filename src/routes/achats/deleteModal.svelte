@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { achats } from '$lib/stores';
+	import { achats, history } from '$lib/stores';
+	import type { Action, AchatRow } from '$lib/types';
 	import toast from 'svelte-5-french-toast';
 	export let ID: string;
 	export let selectedCompany: string;
@@ -7,6 +8,8 @@
 	export let hidden = true;
 
 	function deleteRow() {
+		let tempObj = $achats[selectedCompany].find((item) => item.id == ID);
+
 		$achats = {
 			...$achats,
 			[selectedCompany]: $achats[selectedCompany].filter((row) => row.id !== ID)
@@ -17,6 +20,15 @@
 		});
 
 		hidden = true;
+
+		let newHistoryItem: Action = {
+			name: 'Deleted an achat.',
+			date: new Date(),
+			status: 'M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...tempObj }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
 	}
 </script>
 

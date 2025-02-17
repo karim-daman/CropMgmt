@@ -1,7 +1,7 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	import { entretiens } from '../../lib/stores';
-	import { type Card } from '../../lib/types';
+	import { entretiens, history } from '../../lib/stores';
+	import { type Action, type Card } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
 
 	let selectedCompany: 'Cnh' | 'Goweil' = 'Cnh'; // Explicitly type selectedCompany
@@ -31,6 +31,19 @@
 			[selectedCompany]: [...($entretiens[selectedCompany] || []), { ...newCard }]
 		};
 
+		toast.success('Added a new card.', {
+			position: 'top-right'
+		});
+
+		let newHistoryItem: Action = {
+			name: 'Added a new entretien.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newCard }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
+
 		// Reset the newCard object
 		newCard = {
 			id: 0,
@@ -39,10 +52,6 @@
 			status: 'open',
 			description: ''
 		};
-
-		toast.success('Added a new card.', {
-			position: 'top-right'
-		});
 	}
 
 	function updateStatus(id: number, status: Card['status']) {

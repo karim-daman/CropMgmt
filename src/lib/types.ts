@@ -46,3 +46,11 @@ export type PointageRow = {
 	startDate: Date;
 	missedDays: number;
 };
+
+export type Action = {
+	date: Date;
+	name: string;
+	status: string;
+	object: AchatRow | ClientRow | Card | LivraisonRow | PointageRow;
+	toggle?: boolean;
+};

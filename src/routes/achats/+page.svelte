@@ -1,7 +1,7 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	import { achats } from '../../lib/stores';
-	import { type AchatRow } from '../../lib/types';
+	import { achats, history } from '../../lib/stores';
+	import { type AchatRow, type Action } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
 
 	let selectedCompany = 'Cnh';
@@ -31,11 +31,20 @@
 			[selectedCompany]: [...($achats[selectedCompany] || []), { ...newRow }]
 		};
 
-		newRow = { id: 0, article: '', prix: 0, quantity: 0, total: 0 };
-
 		toast.success('Added a new achat.', {
 			position: 'top-right'
 		});
+
+		let newHistoryItem: Action = {
+			name: 'Added a new achat.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newRow }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
+
+		newRow = { id: 0, article: '', prix: 0, quantity: 0, total: 0 };
 	}
 </script>
 

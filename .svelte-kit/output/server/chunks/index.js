@@ -12,6 +12,15 @@ function run_all(arr) {
     arr[i]();
   }
 }
+function fallback(value, fallback2, lazy = false) {
+  return value === void 0 ? lazy ? (
+    /** @type {() => V} */
+    fallback2()
+  ) : (
+    /** @type {V} */
+    fallback2
+  ) : value;
+}
 const DERIVED = 1 << 1;
 const EFFECT = 1 << 2;
 const RENDER_EFFECT = 1 << 3;
@@ -1169,6 +1178,15 @@ function slot(payload, $$props, name, slot_props, fallback_fn) {
     slot_fn(payload, slot_props);
   }
 }
+function bind_props(props_parent, props_now) {
+  for (const key in props_now) {
+    const initial_value = props_parent[key];
+    const value = props_now[key];
+    if (initial_value === void 0 && value !== void 0 && Object.getOwnPropertyDescriptor(props_parent, key)?.set) {
+      props_parent[key] = value;
+    }
+  }
+}
 function ensure_array_like(array_like_or_iterator) {
   if (array_like_or_iterator) {
     return array_like_or_iterator.length !== void 0 ? array_like_or_iterator : Array.from(array_like_or_iterator);
@@ -1176,7 +1194,7 @@ function ensure_array_like(array_like_or_iterator) {
   return [];
 }
 export {
-  merge_styles as $,
+  attr as $,
   component_root as A,
   BROWSER as B,
   CLEAN as C,
@@ -1199,21 +1217,23 @@ export {
   pop as T,
   UNOWNED as U,
   current_component as V,
-  add_styles as W,
-  escape_html as X,
-  spread_props as Y,
-  spread_attributes as Z,
-  attr as _,
+  getContext as W,
+  add_styles as X,
+  escape_html as Y,
+  spread_props as Z,
+  spread_attributes as _,
   DERIVED as a,
-  stringify as a0,
-  store_get as a1,
-  ensure_array_like as a2,
-  unsubscribe_stores as a3,
-  slot as a4,
-  getContext as a5,
-  noop as a6,
-  subscribe_to_store as a7,
-  run_all as a8,
+  merge_styles as a0,
+  stringify as a1,
+  store_get as a2,
+  ensure_array_like as a3,
+  unsubscribe_stores as a4,
+  slot as a5,
+  fallback as a6,
+  bind_props as a7,
+  noop as a8,
+  subscribe_to_store as a9,
+  run_all as aa,
   schedule_effect as b,
   active_reaction as c,
   is_runes as d,

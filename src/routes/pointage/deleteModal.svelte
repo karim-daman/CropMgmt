@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { pointages } from '$lib/stores';
+	import { history, pointages } from '$lib/stores';
+	import type { Action } from '$lib/types';
 	import toast from 'svelte-5-french-toast';
 	export let ID: number;
 	export let hidden = true;
 
 	function deleteRow() {
+		let tempObj = $pointages.find((row) => row.ID == ID);
 		$pointages = $pointages.filter((row) => row.ID !== ID);
 
 		toast.success('Removed an pointage ID: ' + ID, {
@@ -12,6 +14,15 @@
 		});
 
 		hidden = true;
+
+		let newHistoryItem: Action = {
+			name: 'Deleted a pointage with ID: ' + ID,
+			date: new Date(),
+			status: 'M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...tempObj }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
 	}
 </script>
 

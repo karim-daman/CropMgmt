@@ -1,7 +1,7 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	import { pointages } from '../../lib/stores';
-	import { type PointageRow } from '../../lib/types';
+	import { history, pointages } from '../../lib/stores';
+	import { type Action, type PointageRow } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
 
 	let newRow: PointageRow = {
@@ -20,16 +20,26 @@
 		}
 
 		$pointages = [...$pointages, { ...newRow }];
+
+		toast.success('Added a new pointage.', {
+			position: 'top-right'
+		});
+
+		let newHistoryItem: Action = {
+			name: 'Added a new pointage.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newRow }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
+
 		newRow = {
 			ID: Date.now(),
 			name: '',
 			startDate: new Date(),
 			missedDays: 0
 		};
-
-		toast.success('Added a new pointage.', {
-			position: 'top-right'
-		});
 	}
 </script>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { entretiens } from '$lib/stores';
+	import { entretiens, history } from '$lib/stores';
+	import type { Action, Card } from '$lib/types';
 	import toast from 'svelte-5-french-toast';
 	export let ID: number;
 	export let selectedCompany: string;
@@ -7,13 +8,27 @@
 
 	function deleteCard() {
 		// Remove the card from the selected company's array
-		$entretiens[selectedCompany] = $entretiens[selectedCompany].filter((card) => card.id !== ID);
+		let tempObj: Card = $entretiens[selectedCompany].find((card: Card) => card.id == ID);
+		$entretiens[selectedCompany] = $entretiens[selectedCompany].filter(
+			(card: Card) => card.id !== ID
+		);
+
+		console.log(JSON.stringify(tempObj));
 
 		toast.success('Removed a card ID: ' + ID, {
 			position: 'top-right'
 		});
 
 		hidden = true;
+
+		let newHistoryItem: Action = {
+			name: 'Deleted an entretien.',
+			date: new Date(),
+			status: 'M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...tempObj }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
 	}
 </script>
 

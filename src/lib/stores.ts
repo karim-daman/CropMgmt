@@ -7,22 +7,21 @@ import {
 	create
 } from '@tauri-apps/plugin-fs';
 import { writable } from 'svelte/store';
-import type { AchatRow, Card, ClientRow, LivraisonRow, PointageRow } from './types';
+import type { AchatRow, Action, Card, ClientRow, LivraisonRow, PointageRow } from './types';
 
 export const achats = writable([
-	{ name: 'Cnh', cards: [] as Card[] },
-	{ name: 'Goweil', cards: [] as Card[] },
-	{ name: 'General', cards: [] as Card[] }
+	{ name: 'Cnh', achat: [] as AchatRow[] },
+	{ name: 'Goweil', achat: [] as AchatRow[] },
+	{ name: 'General', achat: [] as AchatRow[] }
 ]);
-
 export const entretiens = writable([
 	{ name: 'Cnh', cards: [] as Card[] },
 	{ name: 'Goweil', cards: [] as Card[] }
 ]);
-
 export const clients = writable<ClientRow[]>([]);
 export const livraisons = writable<LivraisonRow[]>([]);
 export const pointages = writable<PointageRow[]>([]);
+export const history = writable<Action[]>([]);
 
 async function ensureDataFolder() {
 	const dataFolderExist = await exists('data', {
@@ -36,7 +35,15 @@ async function ensureDataFolder() {
 		});
 	}
 
-	const files = ['achats.txt', 'clients.txt', 'entretiens.txt', 'livraisons.txt', 'pointages.txt'];
+	const files = [
+		'achats.txt',
+		'clients.txt',
+		'entretiens.txt',
+		'livraisons.txt',
+		'pointages.txt',
+		'history.txt'
+	];
+
 	for (const element of files) {
 		const filePath = `data\\${element}`;
 		const fileExists = await exists(filePath, {
@@ -83,16 +90,17 @@ async function loadFromFile<T>(filename: string): Promise<T[]> {
 // Load stores from files
 export async function loadStores() {
 	try {
-		const [achatsData, clientsData, entretiensData, livraisonsData, pointagesData] =
+		const [achatsData, clientsData, entretiensData, livraisonsData, pointagesData, historyData] =
 			await Promise.all([
 				loadFromFile<AchatRow>('achats'),
 				loadFromFile<ClientRow>('clients'),
 				loadFromFile<Card>('entretiens'),
 				loadFromFile<LivraisonRow>('livraisons'),
-				loadFromFile<PointageRow>('pointages')
+				loadFromFile<PointageRow>('pointages'),
+				loadFromFile<Action>('history')
 			]);
 
-		return { achatsData, clientsData, entretiensData, livraisonsData, pointagesData };
+		return { achatsData, clientsData, entretiensData, livraisonsData, pointagesData, historyData };
 	} catch (error) {
 		console.error('Error loading stores:', error);
 		return {
@@ -100,7 +108,8 @@ export async function loadStores() {
 			clientsData: [],
 			entretiensData: [],
 			livraisonsData: [],
-			pointagesData: []
+			pointagesData: [],
+			historyData: []
 		};
 	}
 }
@@ -112,7 +121,7 @@ export async function initializeStores() {
 	if (initialized) return;
 
 	try {
-		const { achatsData, clientsData, entretiensData, livraisonsData, pointagesData } =
+		const { achatsData, clientsData, entretiensData, livraisonsData, pointagesData, historyData } =
 			await loadStores();
 
 		// Set initial values for stores
@@ -121,6 +130,7 @@ export async function initializeStores() {
 		entretiens.set(entretiensData);
 		livraisons.set(livraisonsData);
 		pointages.set(pointagesData);
+		history.set(historyData);
 
 		// Set up subscriptions after initial load
 		achats.subscribe((data) => saveToFile(data, 'achats'));
@@ -128,6 +138,7 @@ export async function initializeStores() {
 		entretiens.subscribe((data) => saveToFile(data, 'entretiens'));
 		livraisons.subscribe((data) => saveToFile(data, 'livraisons'));
 		pointages.subscribe((data) => saveToFile(data, 'pointages'));
+		history.subscribe((data) => saveToFile(data, 'history'));
 	} catch (error) {
 		console.error('Error initializing stores:', error);
 	}

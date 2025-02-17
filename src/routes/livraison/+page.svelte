@@ -1,7 +1,7 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	import { livraisons } from '../../lib/stores';
-	import { type LivraisonRow } from '../../lib/types';
+	import { history, livraisons } from '../../lib/stores';
+	import { type Action, type LivraisonRow } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
 
 	let newRow: LivraisonRow = {
@@ -41,6 +41,19 @@
 		newRow.Total = newRow.UnitPrice * newRow.Quantity;
 		$livraisons = [...$livraisons, { ...newRow }];
 
+		toast.success('Added a new bon livraison.', {
+			position: 'top-right'
+		});
+
+		let newHistoryItem: Action = {
+			name: 'Added a new livraison.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newRow }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
+
 		newRow = {
 			ID: '',
 			Date: new Date(),
@@ -58,10 +71,6 @@
 			Quantity: 0,
 			Total: 0
 		};
-
-		toast.success('Added a new bon livraison.', {
-			position: 'top-right'
-		});
 	}
 
 	function editRow() {}
