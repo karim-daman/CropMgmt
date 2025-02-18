@@ -11,7 +11,7 @@
 		id: 0,
 		article: '',
 		prix: 0,
-		quantity: 0,
+		quantity: 1,
 		total: 0
 	};
 
@@ -44,29 +44,75 @@
 
 		$history = [...$history, { ...newHistoryItem }];
 
-		newRow = { id: 0, article: '', prix: 0, quantity: 0, total: 0 };
+		newRow = { id: 0, article: '', prix: 0, quantity: 1, total: 0 };
 	}
 
+	let oldRow: AchatRow;
 	let editMode: boolean = false;
 
-	function edit() {
+	function edit(currentRow: AchatRow) {
+		oldRow = currentRow;
+		console.log(JSON.stringify(currentRow, null, 2));
+
 		editMode = true;
 
-		toast.success('Edited a achat.', {
+		newRow = {
+			id: currentRow.id,
+			article: currentRow.article,
+			prix: currentRow.prix,
+			quantity: currentRow.quantity,
+			total: currentRow.total
+		};
+
+		console.log(newRow.prix + ' ' + newRow.quantity + ' ' + newRow.total);
+	}
+
+	function save() {
+		if (!newRow.article || !newRow.prix || !newRow.quantity) {
+			toast.error('fields that have * are mandatory.', {
+				position: 'top-right'
+			});
+			cancel();
+			return;
+		}
+
+		newRow.total = newRow.prix * newRow.quantity;
+
+		$achats[selectedCompany] = $achats[selectedCompany].map((row) =>
+			row.id === oldRow.id ? newRow : row
+		);
+		// $pointages.map((row) => (row.ID === oldRow.ID ? console.log(newRow) : console.log(row)));/// when deleting a row, saving it after should be impossible but it's not. find out why ?
+
+		let newHistoryItem: Action = {
+			name: 'upd|Edited an achat.',
+			date: new Date(),
+			status:
+				'm16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10',
+			object: { ...newRow },
+			objectOld: { ...oldRow }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
+
+		toast.success('Edited an achat.', {
 			position: 'top-right'
 		});
 
-		let newHistoryItem: Action = {
-			name: 'upd|Edited a achat.',
-			date: new Date(),
-			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
-			object: { ...newRow }
-		};
+		cancel();
+	}
+
+	function cancel() {
+		newRow = { id: 0, article: '', prix: 0, quantity: 1, total: 0 };
+		editMode = false;
 	}
 </script>
 
 <div class="rounded-lg bg-white p-6 shadow">
-	<h1 class="mb-4 text-2xl font-bold">Achats</h1>
+	<div class="flex justify-between">
+		<h1 class="mb-4 text-2xl font-bold">Achats</h1>
+
+		<p class="text-xs">(fields that have * are mandatory)</p>
+	</div>
 
 	<div class=" mb-4 flex space-x-4">
 		{#each companies as company}
@@ -75,8 +121,7 @@
 				class="pressable rounded border px-4 py-2 {selectedCompany === company
 					? 'bg-blue-500 text-white'
 					: ''} "
-				class:selected={selectedCompany === company}
-			>
+				class:selected={selectedCompany === company}>
 				{company}
 			</button>
 		{/each}
@@ -86,22 +131,43 @@
 		<input
 			type="text"
 			bind:value={newRow.article}
-			placeholder="Article"
-			class="rounded border p-2"
-		/>
-		<input type="number" bind:value={newRow.prix} placeholder="Prix" class="rounded border p-2" />
+			placeholder="Article *"
+			class="rounded border p-2" />
+		<input type="number" bind:value={newRow.prix} placeholder="Prix *" class="rounded border p-2" />
 		<input
 			type="number"
 			bind:value={newRow.quantity}
-			placeholder="Quantity"
-			class="rounded border p-2"
-		/>
-		<button onclick={addRow} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+			min="1"
+			placeholder="Quantity *"
+			class="rounded border p-2" />
+		<!-- <button onclick={addRow} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
 			Add
-		</button>
+		</button> -->
+
+		{#if editMode}
+			<div class="flex justify-between">
+				<button
+					onclick={save}
+					class="pressable mr-0.5 w-full cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+					Save
+				</button>
+
+				<button
+					onclick={cancel}
+					class="pressable ml-0.5 w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600">
+					Cancel
+				</button>
+			</div>
+		{:else}
+			<button
+				onclick={addRow}
+				class="pressable cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+				Add
+			</button>
+		{/if}
 	</div>
 
-	<table class="w-full">
+	<table class="w-full {editMode ? 'pointer-events-none ' : ''}">
 		<thead>
 			<tr class="bg-gray-100">
 				<th class="p-2 text-left">Article</th>
@@ -128,19 +194,21 @@
 						<DeleteModal {selectedCompany} ID={row.id} />
 
 						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<button onclick={edit} class="pressable mr-1 size-6 rounded-sm border">
+						<button
+							onclick={() => {
+								edit(row);
+							}}
+							class="pressable mr-1 size-6 cursor-pointer rounded-sm border">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
-								stroke="currentColor"
-							>
+								stroke="currentColor">
 								<path
 									stroke-linecap="round"
 									stroke-linejoin="round"
-									d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-								/>
+									d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
 							</svg>
 						</button>
 					</td>
