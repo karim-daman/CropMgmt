@@ -13,8 +13,6 @@
 			(card: Card) => card.id !== ID
 		);
 
-		console.log(JSON.stringify(tempObj));
-
 		toast.success('Deleted a card.', {
 			position: 'top-right'
 		});
@@ -29,6 +27,8 @@
 		};
 
 		$history = [...$history, { ...newHistoryItem }];
+
+		console.log(JSON.stringify(newHistoryItem, null, 2));
 	}
 </script>
 

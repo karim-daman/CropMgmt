@@ -71,9 +71,10 @@
 		// $pointages.map((row) => (row.ID === oldRow.ID ? console.log(newRow) : console.log(row)));/// when deleting a row, saving it after should be impossible but it's not. find out why ?
 
 		let newHistoryItem: Action = {
-			name: 'upd|Edited a new pointage.',
+			name: 'upd|Edited a pointage.',
 			date: new Date(),
-			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			status:
+				'm16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10',
 			object: { ...newRow },
 			objectOld: { ...oldRow }
 		};
@@ -140,7 +141,6 @@
 	<table class="w-full">
 		<thead>
 			<tr class="bg-gray-100">
-				<th class="p-2 text-left">ID</th>
 				<th class="p-2 text-left">Name</th>
 				<th class="p-2 text-left">Start Date</th>
 				<th class="p-2 text-left">Missed Days</th>
@@ -150,7 +150,6 @@
 		<tbody>
 			{#each $pointages as row}
 				<tr class="border-b">
-					<td class="p-2">{row.ID}</td>
 					<td class="p-2">{row.name}</td>
 					<td class="p-2">{new Date(row.startDate).toLocaleDateString()}</td>
 					<td class="p-2">{row.missedDays}</td>
