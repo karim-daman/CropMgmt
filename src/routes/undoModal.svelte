@@ -1,44 +1,26 @@
 <script lang="ts">
-	import { entretiens, history } from '$lib/stores';
-	import type { Action, Card } from '$lib/types';
+	import { history } from '$lib/stores';
 	import toast from 'svelte-5-french-toast';
-	export let ID: number;
-	export let selectedCompany: string;
+
 	export let hidden = true;
 
-	function deleteCard() {
-		// Remove the card from the selected company's array
-		let tempObj: Card = $entretiens[selectedCompany].find((card: Card) => card.id == ID);
-		$entretiens[selectedCompany] = $entretiens[selectedCompany].filter(
-			(card: Card) => card.id !== ID
-		);
-
-		toast.success('Deleted a card.', {
+	function onclick() {
+		// history.set([]); // logic
+		toast.success('Undo history item.', {
 			position: 'top-right'
 		});
-
 		hidden = true;
-
-		let newHistoryItem: Action = {
-			name: 'del|Deleted an entretien.',
-			date: new Date(),
-			status: 'M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
-			object: { ...tempObj }
-		};
-
-		$history = [...$history, { ...newHistoryItem }];
-
-		console.log(JSON.stringify(newHistoryItem, null, 2));
 	}
 </script>
 
-<!-- <button onclick={() => (hidden = !hidden)} class="text-red-500 hover:text-red-700"> × </button> -->
-
+<!-- svelte-ignore a11y_consider_explicit_label -->
 <button
-	onclick={() => (hidden = !hidden)}
-	class="pressable mx-0.5 flex cursor-pointer rounded-sm border px-1 hover:bg-red-500 hover:text-white"
+	onclick={() => {
+		hidden = !hidden;
+	}}
+	class="pressable mx-0.5 flex cursor-pointer rounded-sm border px-1 hover:bg-blue-500 hover:text-white"
 >
-	<!-- delete -->
+	<!-- undo -->
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
@@ -47,7 +29,11 @@
 		stroke="currentColor"
 		class="size-5"
 	>
-		<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+		<path
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+		/>
 	</svg>
 </button>
 
@@ -102,12 +88,10 @@
 					/>
 				</svg>
 				<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-					Are you sure you want to delete card ID: {ID}?
+					Are you sure you want to undo history item ?
 				</h3>
 				<button
-					onclick={() => {
-						deleteCard();
-					}}
+					{onclick}
 					data-modal-hide="popup-modal"
 					type="button"
 					class="pressable inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none dark:focus:ring-red-800"

@@ -25,7 +25,7 @@
 	}
 </script>
 
-<a class="pressable flex w-16 rounded-sm border px-2" href="/livraison">
+<a class="pressable no-print flex w-16 rounded-sm border px-2" href="/livraison">
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		fill="none"
@@ -121,3 +121,11 @@
 		</p>
 	</div>
 </div>
+
+<style>
+	@media print {
+		.no-print {
+			display: none;
+		}
+	}
+</style>
