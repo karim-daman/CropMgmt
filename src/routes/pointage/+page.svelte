@@ -11,6 +11,8 @@
 		missedDays: 0
 	};
 
+	let oldRow: PointageRow;
+
 	function addRow() {
 		if (!newRow.name) {
 			toast.error('Please enter the name.', {
@@ -26,7 +28,7 @@
 		});
 
 		let newHistoryItem: Action = {
-			name: 'Added a new pointage.',
+			name: 'cre|Added a new pointage.',
 			date: new Date(),
 			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
 			object: { ...newRow }
@@ -40,6 +42,59 @@
 			startDate: new Date(),
 			missedDays: 0
 		};
+	}
+
+	let editMode: boolean = false;
+
+	function edit(currentRow: PointageRow) {
+		oldRow = currentRow;
+		console.log(JSON.stringify(currentRow, null, 2));
+
+		editMode = true;
+
+		newRow.ID = currentRow.ID;
+		newRow.name = currentRow.name;
+		newRow.missedDays = currentRow.missedDays;
+		newRow.startDate = currentRow.startDate;
+	}
+
+	function save() {
+		if (!newRow.name) {
+			toast.error('Please enter the name.', {
+				position: 'top-right'
+			});
+			cancel();
+			return;
+		}
+
+		$pointages = $pointages.map((row) => (row.ID === oldRow.ID ? newRow : row));
+		// $pointages.map((row) => (row.ID === oldRow.ID ? console.log(newRow) : console.log(row)));/// when deleting a row, saving it after should be impossible but it's not. find out why ?
+
+		let newHistoryItem: Action = {
+			name: 'upd|Edited a new pointage.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newRow },
+			objectOld: { ...oldRow }
+		};
+
+		$history = [...$history, { ...newHistoryItem }];
+
+		toast.success('Edited a pointage.', {
+			position: 'top-right'
+		});
+
+		cancel();
+	}
+
+	function cancel() {
+		newRow = {
+			ID: Date.now(),
+			name: '',
+			startDate: new Date(),
+			missedDays: 0
+		};
+		editMode = false;
 	}
 </script>
 
@@ -55,9 +110,31 @@
 			placeholder="Missed Days"
 			class="rounded border p-2"
 		/>
-		<button on:click={addRow} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-			Add
-		</button>
+
+		{#if editMode}
+			<div class="flex justify-between">
+				<button
+					onclick={save}
+					class="pressable mr-0.5 w-full cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+				>
+					Save
+				</button>
+
+				<button
+					onclick={cancel}
+					class="pressable ml-0.5 w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600"
+				>
+					Cancel
+				</button>
+			</div>
+		{:else}
+			<button
+				onclick={addRow}
+				class="pressable cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+			>
+				Add
+			</button>
+		{/if}
 	</div>
 
 	<table class="w-full">
@@ -81,7 +158,12 @@
 						<DeleteModal ID={row.ID} />
 
 						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<button class="pressable mr-1 size-6 rounded-sm border">
+						<button
+							onclick={() => {
+								edit(row);
+							}}
+							class="pressable mr-1 size-6 rounded-sm border"
+						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"

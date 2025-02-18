@@ -15,14 +15,14 @@
 
 		console.log(JSON.stringify(tempObj));
 
-		toast.success('Removed a card ID: ' + ID, {
+		toast.success('Deleted a card.', {
 			position: 'top-right'
 		});
 
 		hidden = true;
 
 		let newHistoryItem: Action = {
-			name: 'Deleted an entretien.',
+			name: 'del|Deleted an entretien.',
 			date: new Date(),
 			status: 'M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
 			object: { ...tempObj }

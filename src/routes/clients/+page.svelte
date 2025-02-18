@@ -24,14 +24,12 @@
 		newRow.id = Date.now();
 		$clients = [...$clients, { ...newRow }];
 
-		let tempObj = $clients.find((item) => item.id == newRow.id);
-
 		toast.success('Added a new client.', {
 			position: 'top-right'
 		});
 
 		let newHistoryItem: Action = {
-			name: 'Added a new client.',
+			name: 'cre|Added a new client.',
 			date: new Date(),
 			status:
 				'M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z',
@@ -47,6 +45,23 @@
 			totalBotte: '',
 			datefrom: '',
 			dateto: ''
+		};
+	}
+
+	let editMode: boolean = false;
+
+	function edit() {
+		editMode = true;
+
+		toast.success('Edited a client.', {
+			position: 'top-right'
+		});
+
+		let newHistoryItem: Action = {
+			name: 'upd|Edited a client.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newRow }
 		};
 	}
 </script>
@@ -65,7 +80,7 @@
 		/>
 		<input type="date" bind:value={newRow.datefrom} class="rounded border p-2" />
 		<input type="date" bind:value={newRow.dateto} class="rounded border p-2" />
-		<button on:click={addRow} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+		<button onclick={addRow} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
 			Add
 		</button>
 	</div>
@@ -95,7 +110,7 @@
 						<DeleteModal ID={row.id} />
 
 						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<button class="pressable mr-1 size-6 rounded-sm border">
+						<button onclick={edit} class="pressable mr-1 size-6 rounded-sm border">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"

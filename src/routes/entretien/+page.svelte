@@ -24,7 +24,7 @@
 		}
 
 		newCard.id = Date.now();
-		newCard.timestamp = new Date().toString();
+		newCard.timestamp = formatDate(new Date());
 
 		$entretiens = {
 			...$entretiens,
@@ -36,7 +36,7 @@
 		});
 
 		let newHistoryItem: Action = {
-			name: 'Added a new entretien.',
+			name: 'cre|Added a new entretien.',
 			date: new Date(),
 			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
 			object: { ...newCard }
@@ -75,6 +75,44 @@
 				return 'bg-gray-100';
 		}
 	};
+
+	function formatDate(date: Date) {
+		const d = new Date(date);
+
+		// Date components
+		const day = d.getDate().toString().padStart(2, '0');
+		const month = (d.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-based
+		const year = d.getFullYear();
+
+		// Time components
+		let hours = d.getHours();
+		const minutes = d.getMinutes().toString().padStart(2, '0');
+		const ampm = hours >= 12 ? 'PM' : 'AM';
+
+		// Convert hours to 12-hour format
+		hours = hours % 12;
+		hours = hours ? hours : 12; // Handle midnight (0 should be 12)
+		hours = hours.toString().padStart(2, '0');
+
+		return `${day}/${month}/${year} @ ${hours}:${minutes} ${ampm}`;
+	}
+
+	let editMode: boolean = false;
+
+	function edit() {
+		editMode = true;
+
+		toast.success('Edited an entretien.', {
+			position: 'top-right'
+		});
+
+		let newHistoryItem: Action = {
+			name: 'upd|Edited a new entretien.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newRow }
+		};
+	}
 </script>
 
 <div class="rounded-lg bg-white p-6 shadow">
@@ -120,7 +158,7 @@
 			class="rounded border p-2"
 		/>
 		<button on:click={addCard} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-			Add Card
+			Add
 		</button>
 	</div>
 

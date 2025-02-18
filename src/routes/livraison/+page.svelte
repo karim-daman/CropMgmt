@@ -16,7 +16,6 @@
 		},
 		Source: '',
 		Destination: '',
-		Article: '',
 		UnitPrice: 0,
 		Quantity: 0,
 		Total: 0
@@ -46,7 +45,7 @@
 		});
 
 		let newHistoryItem: Action = {
-			name: 'Added a new livraison.',
+			name: 'cre|Added a new livraison.',
 			date: new Date(),
 			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
 			object: { ...newRow }
@@ -66,14 +65,28 @@
 			},
 			Source: '',
 			Destination: '',
-			Article: '',
 			UnitPrice: 0,
 			Quantity: 0,
 			Total: 0
 		};
 	}
 
-	function editRow() {}
+	let editMode: boolean = false;
+
+	function edit() {
+		editMode = true;
+
+		toast.success('Edited a livraison.', {
+			position: 'top-right'
+		});
+
+		let newHistoryItem: Action = {
+			name: 'upd|Edited a new livraison.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newRow }
+		};
+	}
 </script>
 
 <div class="rounded-lg bg-white p-6 shadow">
@@ -146,7 +159,7 @@
 				/>
 			</div>
 			<button
-				on:click={addRow}
+				onclick={addRow}
 				class="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
 			>
 				Add
@@ -201,7 +214,7 @@
 						<DeleteModal ID={row.ID} />
 
 						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<button class="pressable mr-1 size-6 rounded-sm border">
+						<button onclick={edit} class="pressable mr-1 size-6 rounded-sm border">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"

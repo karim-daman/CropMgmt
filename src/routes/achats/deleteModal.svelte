@@ -15,14 +15,14 @@
 			[selectedCompany]: $achats[selectedCompany].filter((row) => row.id !== ID)
 		};
 
-		toast.success('Removed an achat. ' + ID, {
+		toast.success('Deleted an achat.', {
 			position: 'top-right'
 		});
 
 		hidden = true;
 
 		let newHistoryItem: Action = {
-			name: 'Deleted an achat.',
+			name: 'del|Deleted an achat.',
 			date: new Date(),
 			status: 'M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
 			object: { ...tempObj }

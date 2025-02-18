@@ -31,7 +31,7 @@
 			[selectedCompany]: [...($achats[selectedCompany] || []), { ...newRow }]
 		};
 
-		toast.success('Added a new achat.', {
+		toast.success('cre|Added a new achat.', {
 			position: 'top-right'
 		});
 
@@ -46,6 +46,23 @@
 
 		newRow = { id: 0, article: '', prix: 0, quantity: 0, total: 0 };
 	}
+
+	let editMode: boolean = false;
+
+	function edit() {
+		editMode = true;
+
+		toast.success('Edited a achat.', {
+			position: 'top-right'
+		});
+
+		let newHistoryItem: Action = {
+			name: 'upd|Edited a achat.',
+			date: new Date(),
+			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			object: { ...newRow }
+		};
+	}
 </script>
 
 <div class="rounded-lg bg-white p-6 shadow">
@@ -54,7 +71,7 @@
 	<div class=" mb-4 flex space-x-4">
 		{#each companies as company}
 			<button
-				on:click={() => (selectedCompany = company)}
+				onclick={() => (selectedCompany = company)}
 				class="pressable rounded border px-4 py-2 {selectedCompany === company
 					? 'bg-blue-500 text-white'
 					: ''} "
@@ -79,7 +96,7 @@
 			placeholder="Quantity"
 			class="rounded border p-2"
 		/>
-		<button on:click={addRow} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+		<button onclick={addRow} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
 			Add
 		</button>
 	</div>
@@ -111,7 +128,7 @@
 						<DeleteModal {selectedCompany} ID={row.id} />
 
 						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<button class="pressable mr-1 size-6 rounded-sm border">
+						<button onclick={edit} class="pressable mr-1 size-6 rounded-sm border">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"

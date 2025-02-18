@@ -52,5 +52,6 @@ export type Action = {
 	name: string;
 	status: string;
 	object: AchatRow | ClientRow | Card | LivraisonRow | PointageRow;
+	objectOld?: AchatRow | ClientRow | Card | LivraisonRow | PointageRow;
 	toggle?: boolean;
 };

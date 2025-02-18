@@ -15,3 +15,7 @@
 .disappear {
 	@apply pointer-events-none scale-95 opacity-0;
 }
+
+:root {
+	interpolate-size: allow-keywords;
+}

@@ -9,7 +9,6 @@
 		pointages,
 		history
 	} from '../lib/stores';
-	import type { Action } from '@sveltejs/kit';
 	import ClearHistoryModal from './clearHistoryModal.svelte';
 	import toast from 'svelte-5-french-toast';
 
@@ -26,7 +25,7 @@
 
 	let stats: any = [];
 	let titles: string[] = ['achats', 'clients', 'entretiens', 'pointages', 'livraisons'];
-	let icons: any = [userIcon, dollarIcon, breifcaseIcon, calandarIcon, truckIcon];
+	let icons: any = [dollarIcon, userIcon, breifcaseIcon, calandarIcon, truckIcon];
 
 	let historyArray: any;
 
@@ -74,25 +73,6 @@
 		historyArray = history;
 	});
 
-	const activities = [
-		{ user: 'John Doe', action: 'Created a new project', time: '2 hours ago' },
-		{ user: 'Jane Smith', action: 'Completed task "Update dashboard"', time: '4 hours ago' },
-		{ user: 'Mike Johnson', action: 'Added a new team member', time: 'Yesterday' },
-		{ user: 'Sarah Williams', action: 'Closed project "E-commerce site"', time: '2 days ago' },
-		{ user: 'John Doe', action: 'Created a new project', time: '2 hours ago' },
-		{ user: 'Jane Smith', action: 'Completed task "Update dashboard"', time: '4 hours ago' },
-		{ user: 'Mike Johnson', action: 'Added a new team member', time: 'Yesterday' },
-		{ user: 'Sarah Williams', action: 'Closed project "E-commerce site"', time: '2 days ago' },
-		{ user: 'John Doe', action: 'Created a new project', time: '2 hours ago' },
-		{ user: 'Jane Smith', action: 'Completed task "Update dashboard"', time: '4 hours ago' },
-		{ user: 'Mike Johnson', action: 'Added a new team member', time: 'Yesterday' },
-		{ user: 'Sarah Williams', action: 'Closed project "E-commerce site"', time: '2 days ago' },
-		{ user: 'John Doe', action: 'Created a new project', time: '2 hours ago' },
-		{ user: 'Jane Smith', action: 'Completed task "Update dashboard"', time: '4 hours ago' },
-		{ user: 'Mike Johnson', action: 'Added a new team member', time: 'Yesterday' },
-		{ user: 'Sarah Williams', action: 'Closed project "E-commerce site"', time: '2 days ago' }
-	];
-
 	function formatDate(date: Date) {
 		const d = new Date(date);
 
@@ -115,7 +95,7 @@
 	}
 </script>
 
-<div class=" bg-gray-100">
+<div class="target bg-gray-100">
 	<div class="h-full px-4 py-6 sm:px-6 lg:px-8">
 		<header class="mb-8 flex items-center justify-between">
 			<h1 class="text-3xl font-bold text-gray-900 select-none">Dashboard</h1>
@@ -137,7 +117,7 @@
 									<path
 										stroke-linecap="round"
 										stroke-linejoin="round"
-										stroke-width="2"
+										stroke-width="1.5"
 										d="M {icons[i]}"
 									></path>
 								</svg>
@@ -194,7 +174,19 @@
 			<div>
 				<div class="mb-4 flex justify-between">
 					<h2 class=" text-lg font-medium text-gray-900 select-none">
-						History: {$history.length}
+						<!-- History: {$history.length} -->
+
+						<button
+							type="button"
+							class="relative inline-flex items-center rounded-lg bg-indigo-500 px-5 py-1 text-center text-sm font-medium text-white"
+						>
+							History
+							<div
+								class="absolute -end-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 text-xs font-bold text-white dark:border-gray-900"
+							>
+								{$history.length}
+							</div>
+						</button>
 					</h2>
 
 					<div>
@@ -205,7 +197,7 @@
 								onclick={() => {
 									$history = $history.map((item) => ({ ...item, toggle: false }));
 								}}
-								class="pressable rounded-sm border px-6 hover:bg-blue-500 hover:text-white"
+								class="pressable cursor-pointer rounded-sm border bg-blue-200 px-6 hover:bg-blue-500 hover:text-white"
 								>Close All</button
 							>
 						{:else}
@@ -217,15 +209,31 @@
 					<div class="p-5">
 						<ul class="divide-y divide-gray-200">
 							{#each $history as item, i}
+								<!--
+							skelaton
+								<div role="status" class="flex max-w-sm animate-pulse">
+									<div class="flex-shrink-0">
+										<span
+											class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300"
+										></span>
+									</div>
+									<div class="mt-2 ml-4 w-full">
+										<h3 class="mb-4 h-3 w-48 rounded-full bg-gray-300"></h3>
+										<p class="mb-2.5 h-2 w-[320px] rounded-full bg-gray-300"></p>
+										<p class="mb-2.5 h-2 w-[320px] rounded-full bg-gray-300"></p>
+									</div>
+								</div> -->
+
 								<!-- svelte-ignore a11y_click_events_have_key_events -->
 								<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-								<li class=" cursor-pointer p-1 py-3 select-none hover:bg-slate-50">
-									<div class="flex space-x-3">
+								<li class="  p-1 py-3 select-none hover:bg-slate-50">
+									<div class="flex space-x-3 overflow-x-auto">
 										<img
 											class="h-8 w-8 rounded-full"
 											src="https://placehold.co/400x400?text=H"
 											alt="User avatar"
 										/>
+
 										<div class="flex-1 space-y-1">
 											<div class="flex items-center justify-between">
 												<h3 class="text-sm font-medium">Houssam</h3>
@@ -235,8 +243,9 @@
 
 												<!-- svelte-ignore a11y_consider_explicit_label -->
 											</div>
+
 											<div class="flex justify-between text-sm text-gray-500">
-												<p class="flex">
+												<div class="flex">
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														fill="none"
@@ -248,8 +257,17 @@
 														<path stroke-linecap="round" stroke-linejoin="round" d={item.status} />
 													</svg>
 
-													{item.name}
-												</p>
+													<span
+														class=" px-2 {item.name.split('|')[0] == 'del'
+															? 'del'
+															: item.name.split('|')[0] == 'cre'
+																? 'cre'
+																: item.name.split('|')[0] == 'upd'
+																	? 'upd'
+																	: 'def'}  me-2 rounded-sm border py-0.5 text-xs font-medium"
+														>{item.name.split('|')[1]}</span
+													>
+												</div>
 
 												<div>
 													<!-- svelte-ignore a11y_consider_explicit_label -->
@@ -257,7 +275,7 @@
 														onclick={() => {
 															item.toggle = !item.toggle;
 														}}
-														class="pressable"
+														class="pressable cursor-pointer"
 													>
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
@@ -279,7 +297,7 @@
 														onclick={() => {
 															$history = $history.filter((h) => h.object !== item.object);
 														}}
-														class="pressable"
+														class="pressable cursor-pointer"
 													>
 														<svg
 															xmlns="http://www.w3.org/2000/svg"
@@ -298,15 +316,13 @@
 													</button>
 												</div>
 											</div>
-
 											<pre
-												class="transition-all duration-100 {item.toggle
-													? 'h-72 border'
-													: 'h-0 '} overflow-y-auto rounded-sm text-xs">
-	
-													{JSON.stringify(item.object, null, 2)}
-	
-											</pre>
+												class=" transition-all duration-200 {item.toggle
+													? 'h-auto border'
+													: 'h-0 '} overflow-hidden rounded-sm text-xs">
+															 {JSON.stringify(item?.objectOld, null, 2)}
+															 {JSON.stringify(item.object, null, 2)}
+												</pre>
 										</div>
 									</div>
 								</li>
@@ -320,3 +336,23 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	@import 'tailwindcss';
+
+	.del {
+		@apply border-red-400 bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400;
+	}
+
+	.upd {
+		@apply border-blue-400 bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400;
+	}
+
+	.cre {
+		@apply border-green-400 bg-green-100 text-green-800 dark:bg-gray-700 dark:text-green-400;
+	}
+
+	.def {
+		@apply border-gray-500 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400;
+	}
+</style>

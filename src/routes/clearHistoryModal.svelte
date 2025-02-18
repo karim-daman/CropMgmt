@@ -19,7 +19,8 @@
 	onclick={() => {
 		hidden = !hidden;
 	}}
-	class="pressable rounded-sm border px-6 hover:bg-red-500 hover:text-white">Clear All</button
+	class="pressable cursor-pointer rounded-sm border bg-red-200 px-6 hover:bg-red-500 hover:text-white"
+	>Clear All</button
 >
 
 <div
