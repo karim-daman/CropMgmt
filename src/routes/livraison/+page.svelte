@@ -3,7 +3,6 @@
 	import { history, livraisons } from '../../lib/stores';
 	import { type Action, type LivraisonRow } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
-	import LegandInputField from '../../components/legandInputField.svelte';
 
 	let newRow: LivraisonRow = {
 		ID: '',
