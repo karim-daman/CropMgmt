@@ -167,60 +167,140 @@
 
 	<div class="mb-4 grid grid-cols-3 gap-4">
 		<div class="space-y-2">
-			<input type="datetime-local" bind:value={newRow.Date} class="w-full rounded border p-2" />
-			<input
-				type="text"
-				bind:value={newRow.ClientName}
-				placeholder="Client Name *"
-				class="w-full rounded border p-2" />
-			<input
-				type="tel"
-				bind:value={newRow.Cleinttelephone}
-				placeholder="Client Telephone"
-				class="w-full rounded border p-2" />
+			<div class="relative">
+				<input
+					type="datetime-local"
+					id="floating_outlined"
+					class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+					placeholder=""
+					bind:value={newRow.Date} />
+				<label
+					for="floating_outlined"
+					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>Date *</label>
+			</div>
+
+			<div class="relative">
+				<input
+					type="text"
+					id="floating_outlined"
+					class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+					placeholder=""
+					bind:value={newRow.ClientName} />
+				<label
+					for="floating_outlined"
+					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>ClientName *</label>
+			</div>
+
+			<div class="relative">
+				<input
+					type="tel"
+					id="floating_outlined"
+					class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+					placeholder=""
+					bind:value={newRow.Cleinttelephone} />
+				<label
+					for="floating_outlined"
+					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>Cleint Telephone *</label>
+			</div>
 		</div>
 
 		<div class="space-y-2">
-			<input
-				type="text"
-				bind:value={newRow.chauffeur.ChauffeurName}
-				placeholder="Chauffeur Name *"
-				class="w-full rounded border p-2" />
-			<input
-				type="tel"
-				bind:value={newRow.chauffeur.ChauffeurTelephone}
-				placeholder="Chauffeur Telephone"
-				class="w-full rounded border p-2" />
-			<input
-				type="text"
-				bind:value={newRow.chauffeur.ChauffeurPlateNumber}
-				placeholder="Plate Number"
-				class="w-full rounded border p-2" />
+			<div class="relative">
+				<input
+					type="text"
+					id="floating_outlined"
+					class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+					placeholder=""
+					bind:value={newRow.chauffeur.ChauffeurName} />
+				<label
+					for="floating_outlined"
+					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>Chauffeur Name *</label>
+			</div>
+
+			<div class="relative">
+				<input
+					type="tel"
+					id="floating_outlined"
+					class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+					placeholder=""
+					bind:value={newRow.chauffeur.ChauffeurTelephone} />
+				<label
+					for="floating_outlined"
+					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>Chauffeur Telephone *</label>
+			</div>
+
+			<div class="relative">
+				<input
+					type="text"
+					id="floating_outlined"
+					class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+					placeholder=""
+					bind:value={newRow.chauffeur.ChauffeurPlateNumber} />
+				<label
+					for="floating_outlined"
+					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>Chauffeur PlateNumber *</label>
+			</div>
 		</div>
 
 		<div class="space-y-2">
-			<input
-				type="text"
-				bind:value={newRow.Source}
-				placeholder="Source *"
-				class="w-full rounded border p-2" />
-			<input
-				type="text"
-				bind:value={newRow.Destination}
-				placeholder="Destination *"
-				class="w-full rounded border p-2" />
+			<div class="relative">
+				<input
+					type="text"
+					id="floating_outlined"
+					class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+					placeholder=""
+					bind:value={newRow.Source} />
+				<label
+					for="floating_outlined"
+					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+					Source *</label>
+			</div>
+
+			<div class="relative">
+				<input
+					type="text"
+					id="floating_outlined"
+					class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+					placeholder=""
+					bind:value={newRow.Destination} />
+				<label
+					for="floating_outlined"
+					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+					Destination *</label>
+			</div>
 
 			<div class="grid grid-cols-2 gap-2">
-				<input
-					type="number"
-					bind:value={newRow.UnitPrice}
-					placeholder="Unit Price *"
-					class="rounded border p-2" />
-				<input
-					type="number"
-					bind:value={newRow.Quantity}
-					placeholder="Quantity *"
-					class="rounded border p-2" />
+				<div class="relative">
+					<input
+						type="number"
+						id="floating_outlined"
+						class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+						placeholder=""
+						bind:value={newRow.UnitPrice} />
+					<label
+						for="floating_outlined"
+						class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+						Unit Price *</label>
+				</div>
+
+				<div class="relative">
+					<input
+						type="number"
+						id="floating_outlined"
+						class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+						placeholder=""
+						bind:value={newRow.Quantity} />
+					<label
+						for="floating_outlined"
+						class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+						Quantity *</label>
+				</div>
 			</div>
 
 			{#if editMode}
@@ -240,7 +320,7 @@
 			{:else}
 				<button
 					onclick={addRow}
-					class="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+					class="pressable w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
 					Add
 				</button>
 			{/if}

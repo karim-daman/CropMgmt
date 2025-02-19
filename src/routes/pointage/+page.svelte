@@ -98,17 +98,49 @@
 	}
 </script>
 
-<div class="rounded-lg bg-white p-6 shadow">
+<div class="rounded bg-white p-6 shadow">
 	<h1 class="mb-4 text-2xl font-bold">Pointage</h1>
 
 	<div class="mb-4 grid grid-cols-4 gap-4">
-		<input type="text" bind:value={newRow.name} placeholder="Name" class="rounded border p-2" />
-		<input type="date" bind:value={newRow.startDate} class="rounded border p-2" />
-		<input
-			type="number"
-			bind:value={newRow.missedDays}
-			placeholder="Missed Days"
-			class="rounded border p-2" />
+		<div class="relative">
+			<input
+				type="text"
+				id="floating_outlined"
+				class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+				placeholder=""
+				bind:value={newRow.name} />
+			<label
+				for="floating_outlined"
+				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>Name *</label>
+		</div>
+
+		<div class="relative">
+			<input
+				type="date"
+				id="floating_outlined"
+				class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+				placeholder=""
+				bind:value={newRow.startDate} />
+			<label
+				for="floating_outlined"
+				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>Start Date *</label>
+		</div>
+
+		<div class="relative">
+			<input
+				type="number"
+				id="floating_outlined"
+				class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+				placeholder=""
+				min="0"
+				bind:value={newRow.missedDays} />
+			<label
+				for="floating_outlined"
+				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>Missed Days *</label>
+		</div>
 
 		{#if editMode}
 			<div class="flex justify-between">
