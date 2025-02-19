@@ -116,9 +116,11 @@
 </script>
 
 <div class="rounded bg-white p-6 shadow">
-	<h1 class="mb-4 text-2xl font-bold">Entretien</h1>
+	<div class="flex justify-between">
+		<h1 class="mb-4 text-2xl font-bold">Entretien</h1>
+		<p class="text-xs">(fields that have * are mandatory)</p>
+	</div>
 
-	<!-- Company Selector -->
 	<div class="mb-4">
 		<div class=" mb-4 flex space-x-4">
 			{#each companies as company}
@@ -132,29 +134,38 @@
 				</button>
 			{/each}
 		</div>
-
-		<!-- <label for="company" class="mr-2">Select Company:</label>
-		<select bind:value={selectedCompany} id="company" class="rounded border p-2">
-			{#each companies as company}
-				<option value={company}>{company}</option>
-			{/each}
-		</select> -->
 	</div>
 
-	<!-- Add Card Form -->
 	<div class="mb-4 grid grid-cols-4 gap-4">
-		<input
-			type="datetime-local"
-			bind:value={newCard.dueDate}
-			class="rounded border border-gray-300 p-2 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500" />
-		<select
-			bind:value={newCard.status}
-			class="rounded border border-gray-300 p-2 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500">
-			<option value="open">Open</option>
-			<option value="active">Active</option>
-			<option value="done">Done</option>
-			<option value="overdue">Overdue</option>
-		</select>
+		<div class="relative">
+			<input
+				type="datetime-local"
+				id="floating_outlined"
+				class="peer block w-full appearance-none rounded border-1 border-gray-300 bg-transparent px-2.5 pt-4 pb-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500"
+				placeholder=""
+				bind:value={newCard.dueDate} />
+			<label
+				for="floating_outlined"
+				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>Due Date *</label>
+		</div>
+
+		<div class="relative">
+			<select
+				bind:value={newCard.status}
+				class="peer block w-full rounded border border-gray-300 p-2 px-2.5 pt-4 focus:border-blue-600 focus:ring-0 focus:outline-none dark:border-gray-600 dark:text-white dark:focus:border-blue-500">
+				<option value="open">Open</option>
+				<option value="active">Active</option>
+				<option value="done">Done</option>
+				<option value="overdue">Overdue</option>
+			</select>
+
+			<label
+				for="floating_outlined"
+				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>Status
+			</label>
+		</div>
 
 		<div class="relative">
 			<input
@@ -177,7 +188,7 @@
 	</div>
 
 	<!-- Display Cards -->
-	<div class="grid grid-cols-3 gap-4">
+	<div class="target grid h-[55vh] grid-cols-3 gap-4 overflow-y-auto">
 		{#each $entretiens[selectedCompany] as card}
 			<div class="rounded p-4 shadow {statusColor(card.status)}">
 				<div class="mb-2 flex items-start justify-between">

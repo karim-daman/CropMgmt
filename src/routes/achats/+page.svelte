@@ -31,12 +31,12 @@
 			[selectedCompany]: [...($achats[selectedCompany] || []), { ...newRow }]
 		};
 
-		toast.success('cre|Added a new achat.', {
+		toast.success('Added a new achat.', {
 			position: 'top-right'
 		});
 
 		let newHistoryItem: Action = {
-			name: 'Added a new achat.',
+			name: 'cre|Added a new achat.',
 			date: new Date(),
 			status: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
 			object: { ...newRow }
@@ -190,53 +190,55 @@
 		{/if}
 	</div>
 
-	<table class="w-full {editMode ? 'pointer-events-none ' : ''}">
-		<thead>
-			<tr class="bg-gray-100">
-				<th class="p-2 text-left">Article</th>
-				<th class="p-2 text-left">Prix</th>
-				<th class="p-2 text-left">Quantity</th>
-				<th class="p-2 text-left">Total</th>
-				<th class="p-2 text-left">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each $achats[selectedCompany] as row}
-				<tr class="border-b">
-					<td class="p-2">{row.article}</td>
-					<td class="p-2">{row.prix}</td>
-					<td class="p-2">{row.quantity}</td>
-					<td class="p-2">{row.total}</td>
-					<td class="p-2">
-						<!-- <button on:click={() => deleteRow(row.id)} class="text-red-500 hover:text-red-700">
+	<div class="target h-[55vh] overflow-y-auto">
+		<table class="w-full {editMode ? 'pointer-events-none ' : ''}">
+			<thead>
+				<tr class="bg-gray-100">
+					<th class="p-2 text-left">Article</th>
+					<th class="p-2 text-left">Prix</th>
+					<th class="p-2 text-left">Quantity</th>
+					<th class="p-2 text-left">Total</th>
+					<th class="p-2 text-left">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each $achats[selectedCompany] as row}
+					<tr class="border-b {oldRow != row && editMode ? ' pointer-events-none blur-xs' : ''} ">
+						<td class="p-2">{row.article} </td>
+						<td class="p-2">{row.prix}</td>
+						<td class="p-2">{row.quantity}</td>
+						<td class="p-2">{row.total}</td>
+						<td class="p-2">
+							<!-- <button on:click={() => deleteRow(row.id)} class="text-red-500 hover:text-red-700">
 							Delete
 						</button> -->
 
-						<!-- svelte-ignore a11y_consider_explicit_label -->
+							<!-- svelte-ignore a11y_consider_explicit_label -->
 
-						<DeleteModal {selectedCompany} ID={row.id} />
+							<DeleteModal {selectedCompany} ID={row.id} />
 
-						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<button
-							onclick={() => {
-								edit(row);
-							}}
-							class="pressable mr-1 size-6 cursor-pointer rounded-sm border">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-							</svg>
-						</button>
-					</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+							<!-- svelte-ignore a11y_consider_explicit_label -->
+							<button
+								onclick={() => {
+									edit(row);
+								}}
+								class="pressable mr-1 size-6 cursor-pointer rounded-sm border">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+								</svg>
+							</button>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>

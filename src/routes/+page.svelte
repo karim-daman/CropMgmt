@@ -163,7 +163,7 @@
 		<!--  -->
 
 		<div class="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
-			<div class="overflow-hidden rounded-lg bg-white shadow">
+			<div class="mt-11.5 h-[55vh] overflow-hidden rounded-lg bg-white shadow">
 				<div class="p-5">
 					<h2 class="mb-4 text-lg font-medium text-gray-900 select-none">Revenue Overview</h2>
 					<div class="h-64"></div>
@@ -175,15 +175,15 @@
 					<h2 class=" text-lg font-medium text-gray-900 select-none">
 						<!-- History: {$history.length} -->
 
-						<button
+						<div
 							type="button"
-							class="relative inline-flex items-center rounded-lg bg-indigo-500 px-5 py-1 text-center text-sm font-medium text-white">
+							class="relative inline-flex items-center rounded bg-indigo-500 px-5 py-1 text-center text-sm font-medium text-white">
 							History
 							<div
 								class="absolute -end-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 text-xs font-bold text-white dark:border-gray-900">
-								{$history.length}
+								<p class="text-[9px]">{$history.length}</p>
 							</div>
-						</button>
+						</div>
 					</h2>
 
 					<div>
@@ -201,28 +201,13 @@
 						{/if}
 					</div>
 				</div>
-				<div class="target h-96 overflow-y-auto rounded-lg bg-white shadow">
+				<div class="target h-[55vh] overflow-y-auto rounded-lg bg-white shadow">
 					<div class="p-5">
 						<ul class="divide-y divide-gray-200">
 							{#each $history as item, i}
-								<!--
-							skelaton
-								<div role="status" class="flex max-w-sm animate-pulse">
-									<div class="flex-shrink-0">
-										<span
-											class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300"
-										></span>
-									</div>
-									<div class="mt-2 ml-4 w-full">
-										<h3 class="mb-4 h-3 w-48 rounded-full bg-gray-300"></h3>
-										<p class="mb-2.5 h-2 w-[320px] rounded-full bg-gray-300"></p>
-										<p class="mb-2.5 h-2 w-[320px] rounded-full bg-gray-300"></p>
-									</div>
-								</div> -->
-
 								<!-- svelte-ignore a11y_click_events_have_key_events -->
 								<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-								<li class="  p-1 py-3 select-none hover:bg-slate-50">
+								<li class="  transition_all p-1 py-3 duration-200 select-none hover:bg-slate-100">
 									<div class="flex space-x-3 overflow-x-auto">
 										<img
 											class="h-8 w-8 rounded-full"
@@ -350,9 +335,5 @@
 
 	.def {
 		@apply border-gray-500 bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400;
-	}
-
-	.target {
-		scrollbar-gutter: stable;
 	}
 </style>

@@ -159,10 +159,10 @@
 </script>
 
 <div class="rounded-lg bg-white p-6 shadow">
-	<fiv class="flex justify-between">
+	<div class="flex justify-between">
 		<h1 class="mb-4 text-2xl font-bold">Livraison</h1>
-		<p class="text-xs">(fields with * are mandatory)</p>
-	</fiv>
+		<p class="text-xs">(fields that have * are mandatory)</p>
+	</div>
 
 	<div class="mb-4 grid grid-cols-3 gap-4">
 		<div class="space-y-2">
@@ -326,71 +326,78 @@
 		</div>
 	</div>
 
-	<table class="w-full {editMode ? 'pointer-events-none ' : ''}">
-		<thead>
-			<tr class="bg-gray-100">
-				<th class="p-2 text-left">Date</th>
-				<th class="p-2 text-left">Client</th>
-				<th class="p-2 text-left">Chauffeur</th>
-				<th class="p-2 text-left">Source</th>
-				<th class="p-2 text-left">Destination</th>
-				<th class="p-2 text-left">Price</th>
-				<th class="p-2 text-left">Qty</th>
-				<th class="p-2 text-left">Total</th>
-				<th class="p-2 text-left">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each $livraisons as row}
-				<tr class="border-b">
-					<td class="p-2">{new Date(row.Date).toLocaleDateString()}</td>
-					<td class="p-2">{row.ClientName}</td>
-					<td class="p-2">{row.chauffeur.ChauffeurName}</td>
-					<td class="p-2">{row.Source}</td>
-					<td class="p-2">{row.Destination}</td>
-					<td class="p-2">{row.UnitPrice}</td>
-					<td class="p-2">{row.Quantity}</td>
-					<td class="p-2">{row.Total}</td>
-					<td class="flex p-2">
-						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<a href="/livraison/{row.ID}" class="pressable mr-1 size-6 rounded-sm border"
-							><svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class=" ">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-							</svg>
-						</a>
-
-						<DeleteModal ID={row.ID} />
-
-						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<button
-							onclick={() => {
-								edit(row);
-							}}
-							class="pressable mr-1 size-6 rounded-sm border">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-							</svg>
-						</button>
-					</td>
+	<div class="target h-[55vh] overflow-y-auto">
+		<table class=" w-full {editMode ? ' pointer-events-none ' : ''}">
+			<thead>
+				<tr class="bg-gray-100">
+					<th class="p-2 text-left">Date</th>
+					<th class="p-2 text-left">Client</th>
+					<th class="p-2 text-left">Chauffeur</th>
+					<th class="p-2 text-left">Source</th>
+					<th class="p-2 text-left">Destination</th>
+					<th class="p-2 text-left">Price</th>
+					<th class="p-2 text-left">Qty</th>
+					<th class="p-2 text-left">Total</th>
+					<th class="p-2 text-left">Actions</th>
 				</tr>
-			{/each}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				<!--   -->
+
+				{#each $livraisons as row}
+					<tr
+						class="border-b {oldRow?.ID != row.ID && editMode
+							? ' pointer-events-none blur-xs'
+							: ''} ">
+						<td class="p-2">{new Date(row.Date).toLocaleDateString()}</td>
+						<td class="p-2">{row.ClientName}</td>
+						<td class="p-2">{row.chauffeur.ChauffeurName}</td>
+						<td class="p-2">{row.Source}</td>
+						<td class="p-2">{row.Destination}</td>
+						<td class="p-2">{row.UnitPrice}</td>
+						<td class="p-2">{row.Quantity}</td>
+						<td class="p-2">{row.Total}</td>
+						<td class="flex p-2">
+							<!-- svelte-ignore a11y_consider_explicit_label -->
+							<a href="/livraison/{row.ID}" class="pressable mr-1 size-6 rounded-sm border"
+								><svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor"
+									class=" ">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+								</svg>
+							</a>
+
+							<DeleteModal ID={row.ID} />
+
+							<!-- svelte-ignore a11y_consider_explicit_label -->
+							<button
+								onclick={() => {
+									edit(row);
+								}}
+								class="pressable mr-1 size-6 rounded-sm border">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+								</svg>
+							</button>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>

@@ -19,3 +19,7 @@
 :root {
 	interpolate-size: allow-keywords;
 }
+
+.target {
+	scrollbar-gutter: stable;
+}

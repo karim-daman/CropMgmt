@@ -111,7 +111,10 @@
 </script>
 
 <div class="rounded bg-white p-6 shadow">
-	<h1 class="mb-4 text-2xl font-bold">Clients</h1>
+	<div class="flex justify-between">
+		<h1 class="mb-4 text-2xl font-bold">Clients</h1>
+		<p class="text-xs">(fields that have * are mandatory)</p>
+	</div>
 
 	<div class="mb-4 grid grid-cols-6 gap-4">
 		<div class="relative">
@@ -174,18 +177,9 @@
 			<label
 				for="floating_outlined"
 				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Date to *</label>
+				>Date to
+			</label>
 		</div>
-
-		<!-- <input type="text" bind:value={newRow.name} placeholder="Name" class="rounded border p-2" />
-		<input type="text" bind:value={newRow.pivot} placeholder="Pivot" class="rounded border p-2" />
-		<input
-			type="text"
-			bind:value={newRow.totalBotte}
-			placeholder="Total Botte"
-			class="rounded border p-2" />
-		<input type="date" bind:value={newRow.datefrom} class="rounded border p-2" />
-		<input type="date" bind:value={newRow.dateto} class="rounded border p-2" /> -->
 
 		{#if editMode}
 			<div class="flex justify-between">
@@ -210,51 +204,53 @@
 		{/if}
 	</div>
 
-	<table class="w-full {editMode ? 'pointer-events-none ' : ''}">
-		<thead>
-			<tr class="bg-gray-100">
-				<th class="p-2 text-left">Name</th>
-				<th class="p-2 text-left">Pivot</th>
-				<th class="p-2 text-left">Total Botte</th>
-				<th class="p-2 text-left">Date From</th>
-				<th class="p-2 text-left">Date To</th>
-				<th class="p-2 text-left">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{#each $clients as row}
-				<tr class="border-b">
-					<td class="p-2">{row.name}</td>
-					<td class="p-2">{row.pivot}</td>
-					<td class="p-2">{row.totalBotte}</td>
-					<td class="p-2">{row.datefrom}</td>
-					<td class="p-2">{row.dateto}</td>
-					<td class="p-2">
-						<!-- svelte-ignore a11y_consider_explicit_label -->
-
-						<DeleteModal ID={row.id} />
-
-						<!-- svelte-ignore a11y_consider_explicit_label -->
-						<button
-							onclick={() => {
-								edit(row);
-							}}
-							class="pressable mr-1 size-6 rounded-sm border">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-							</svg>
-						</button>
-					</td>
+	<div class="target h-[55vh] overflow-y-auto">
+		<table class="w-full">
+			<thead>
+				<tr class="bg-gray-100">
+					<th class="p-2 text-left">Name</th>
+					<th class="p-2 text-left">Pivot</th>
+					<th class="p-2 text-left">Total Botte</th>
+					<th class="p-2 text-left">Date From</th>
+					<th class="p-2 text-left">Date To</th>
+					<th class="p-2 text-left">Actions</th>
 				</tr>
-			{/each}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{#each $clients as row}
+					<tr class="border-b {oldRow != row && editMode ? ' pointer-events-none blur-xs' : ''}">
+						<td class="p-2">{row.name}</td>
+						<td class="p-2">{row.pivot}</td>
+						<td class="p-2">{row.totalBotte}</td>
+						<td class="p-2">{row.datefrom}</td>
+						<td class="p-2">{row.dateto}</td>
+						<td class="p-2">
+							<!-- svelte-ignore a11y_consider_explicit_label -->
+
+							<DeleteModal ID={row.id} />
+
+							<!-- svelte-ignore a11y_consider_explicit_label -->
+							<button
+								onclick={() => {
+									edit(row);
+								}}
+								class="pressable mr-1 size-6 rounded-sm border">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke-width="1.5"
+									stroke="currentColor">
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+								</svg>
+							</button>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>

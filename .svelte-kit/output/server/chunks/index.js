@@ -1,5 +1,5 @@
 import { clsx as clsx$1 } from "clsx";
-const BROWSER = false;
+const DEV = false;
 var is_array = Array.isArray;
 var index_of = Array.prototype.indexOf;
 var array_from = Array.from;
@@ -20,6 +20,15 @@ function fallback(value, fallback2, lazy = false) {
     /** @type {V} */
     fallback2
   ) : value;
+}
+function equals(value) {
+  return value === this.v;
+}
+function safe_not_equal(a, b) {
+  return a != a ? b == b : a !== b || a !== null && typeof a === "object" || typeof a === "function";
+}
+function safe_equals(value) {
+  return !safe_not_equal(value, this.v);
 }
 const DERIVED = 1 << 1;
 const EFFECT = 1 << 2;
@@ -675,8 +684,8 @@ function update_effect(effect2) {
     effect2.wv = write_version;
     var deps = effect2.deps;
     var dep;
-    if (BROWSER && tracing_mode_flag && (effect2.f & DIRTY) !== 0 && deps !== null) ;
-    if (BROWSER) ;
+    if (DEV && tracing_mode_flag && (effect2.f & DIRTY) !== 0 && deps !== null) ;
+    if (DEV) ;
   } catch (error) {
     handle_error(error, effect2, previous_effect, previous_component_context || effect2.ctx);
   } finally {
@@ -843,7 +852,7 @@ function flush_sync(fn) {
     }
     flush_count = 0;
     last_scheduled_effect = null;
-    if (BROWSER) ;
+    if (DEV) ;
     return result;
   } finally {
     scheduler_mode = previous_scheduler_mode;
@@ -1194,69 +1203,72 @@ function ensure_array_like(array_like_or_iterator) {
   return [];
 }
 export {
-  attr as $,
-  component_root as A,
-  BROWSER as B,
+  spread_props as $,
+  clear_text_content as A,
+  BLOCK_EFFECT as B,
   CLEAN as C,
-  DIRTY as D,
-  is_passive_event as E,
-  create_text as F,
-  branch as G,
+  DEV as D,
+  array_from as E,
+  component_root as F,
+  is_passive_event as G,
   HYDRATION_ERROR as H,
-  push$1 as I,
-  component_context as J,
-  pop$1 as K,
-  LEGACY_PROPS as L,
+  create_text as I,
+  branch as J,
+  push$1 as K,
+  component_context as L,
   MAYBE_DIRTY as M,
-  get as N,
-  flush_sync as O,
-  render as P,
-  push as Q,
+  pop$1 as N,
+  LEGACY_PROPS as O,
+  get as P,
+  flush_sync as Q,
   ROOT_EFFECT as R,
-  setContext as S,
-  pop as T,
+  render as S,
+  push as T,
   UNOWNED as U,
-  current_component as V,
-  getContext as W,
-  add_styles as X,
-  escape_html as Y,
-  spread_props as Z,
-  spread_attributes as _,
-  DERIVED as a,
-  merge_styles as a0,
-  stringify as a1,
-  store_get as a2,
-  ensure_array_like as a3,
-  unsubscribe_stores as a4,
-  slot as a5,
-  fallback as a6,
-  bind_props as a7,
-  noop as a8,
-  subscribe_to_store as a9,
-  run_all as aa,
-  schedule_effect as b,
-  active_reaction as c,
-  is_runes as d,
-  BLOCK_EFFECT as e,
-  derived_sources as f,
-  state_unsafe_mutation as g,
-  active_effect as h,
+  setContext as V,
+  pop as W,
+  current_component as X,
+  getContext as Y,
+  add_styles as Z,
+  escape_html as _,
+  DIRTY as a,
+  spread_attributes as a0,
+  attr as a1,
+  merge_styles as a2,
+  stringify as a3,
+  store_get as a4,
+  ensure_array_like as a5,
+  unsubscribe_stores as a6,
+  slot as a7,
+  fallback as a8,
+  bind_props as a9,
+  noop as aa,
+  safe_not_equal as ab,
+  subscribe_to_store as ac,
+  run_all as ad,
+  set_signal_status as b,
+  DERIVED as c,
+  schedule_effect as d,
+  equals as e,
+  active_reaction as f,
+  is_runes as g,
+  derived_sources as h,
   increment_write_version as i,
-  BRANCH_EFFECT as j,
-  untracked_writes as k,
-  set_untracked_writes as l,
-  get_next_sibling as m,
-  define_property as n,
-  set_active_reaction as o,
-  set_active_effect as p,
-  is_array as q,
-  init_operations as r,
-  set_signal_status as s,
-  get_first_child as t,
+  state_unsafe_mutation as j,
+  active_effect as k,
+  BRANCH_EFFECT as l,
+  untracked_writes as m,
+  set_untracked_writes as n,
+  get_next_sibling as o,
+  define_property as p,
+  set_active_reaction as q,
+  set_active_effect as r,
+  safe_equals as s,
+  is_array as t,
   untracking as u,
-  HYDRATION_START as v,
-  HYDRATION_END as w,
-  hydration_failed as x,
-  clear_text_content as y,
-  array_from as z
+  init_operations as v,
+  get_first_child as w,
+  HYDRATION_START as x,
+  HYDRATION_END as y,
+  hydration_failed as z
 };
