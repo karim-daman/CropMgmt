@@ -127,8 +127,7 @@
 					class="pressable rounded border px-4 py-2 {selectedCompany === company
 						? 'bg-blue-500 text-white'
 						: ''} "
-					class:selected={selectedCompany === company}
-				>
+					class:selected={selectedCompany === company}>
 					{company}
 				</button>
 			{/each}
@@ -155,8 +154,7 @@
 			type="text"
 			bind:value={newCard.description}
 			placeholder="Description"
-			class="rounded border p-2"
-		/>
+			class="rounded border p-2" />
 		<button on:click={addCard} class="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
 			Add
 		</button>
@@ -168,7 +166,7 @@
 			<div class="rounded-lg p-4 shadow {statusColor(card.status)}">
 				<div class="mb-2 flex items-start justify-between">
 					<span class="text-sm text-gray-500">
-						{new Date(card.timestamp).toLocaleString()}
+						{card.timestamp}
 					</span>
 
 					<DeleteModal {selectedCompany} ID={card.id} />
@@ -181,8 +179,7 @@
 					<select
 						bind:value={card.status}
 						on:change={() => updateStatus(card.id, card.status)}
-						class="rounded border p-1 text-sm"
-					>
+						class="rounded border p-1 text-sm">
 						<option value="open">Open</option>
 						<option value="active">Active</option>
 						<option value="done">Done</option>
