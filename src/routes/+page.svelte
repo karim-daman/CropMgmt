@@ -1,13 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	import { blur, crossfade, draw, fade, fly, scale, slide } from 'svelte/transition';
-
 	import {
 		achats,
 		clients,
 		entretiens,
-		initializeStores,
+		initializeAllStores,
 		livraisons,
 		pointages,
 		history
@@ -36,7 +34,8 @@
 	$: historyArray;
 
 	onMount(async () => {
-		await initializeStores();
+		await initializeAllStores();
+
 		toast.success('Welcome back.', {
 			position: 'top-right'
 		});

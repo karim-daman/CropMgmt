@@ -1,8 +1,9 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	import { achats, history } from '../../lib/stores';
+	import { achats, history, initializeAchatsStore } from '../../lib/stores';
 	import { type AchatRow, type Action } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
+	import { onMount } from 'svelte';
 
 	let selectedCompany = 'Cnh';
 	const companies = ['Cnh', 'Goweil', 'General'];
@@ -14,6 +15,12 @@
 		quantity: 1,
 		total: 0
 	};
+
+	onMount(async () => {
+		if ($achats[selectedCompany] == undefined) {
+			await initializeAchatsStore();
+		}
+	});
 
 	function addRow() {
 		if (!newRow.article || !newRow.prix || !newRow.quantity) {
@@ -111,7 +118,7 @@
 	<div class="flex justify-between">
 		<h1 class="mb-4 text-2xl font-bold">Achats</h1>
 
-		<p class="text-xs">(fields that have * are mandatory)</p>
+		<p class="no-print text-xs">(fields that have * are mandatory)</p>
 	</div>
 
 	<div class=" mb-4 flex space-x-4">
@@ -127,7 +134,7 @@
 		{/each}
 	</div>
 
-	<div class="mb-4 grid grid-cols-4 gap-4">
+	<div class="no-print mb-4 grid grid-cols-4 gap-4">
 		<div class="relative">
 			<input
 				type="text"
@@ -190,7 +197,9 @@
 		{/if}
 	</div>
 
-	<div class="target h-[55vh] overflow-y-auto">
+	<!-- <div class="target h-[55vh] overflow-y-auto print:h-auto print:overflow-visible"> -->
+
+	<div class="target h-[55vh] overflow-y-auto print:h-auto print:overflow-visible">
 		<table class="w-full {editMode ? 'pointer-events-none ' : ''}">
 			<thead>
 				<tr class="bg-gray-100">
@@ -198,7 +207,7 @@
 					<th class="p-2 text-left">Prix</th>
 					<th class="p-2 text-left">Quantity</th>
 					<th class="p-2 text-left">Total</th>
-					<th class="p-2 text-left">Actions</th>
+					<th class="no-print p-2 text-left">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -208,7 +217,7 @@
 						<td class="p-2">{row.prix}</td>
 						<td class="p-2">{row.quantity}</td>
 						<td class="p-2">{row.total}</td>
-						<td class="p-2">
+						<td class="no-print p-2">
 							<!-- <button on:click={() => deleteRow(row.id)} class="text-red-500 hover:text-red-700">
 							Delete
 						</button> -->

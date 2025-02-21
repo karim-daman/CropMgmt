@@ -32,13 +32,11 @@
 		viewBox="0 0 24 24"
 		stroke-width="1.5"
 		stroke="currentColor"
-		class=" mt-1 size-4"
-	>
+		class=" mt-1 size-4">
 		<path
 			stroke-linecap="round"
 			stroke-linejoin="round"
-			d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-		/>
+			d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
 	</svg>
 
 	Back
@@ -47,28 +45,26 @@
 <div class="my-8 bg-white p-8">
 	<h1 class="mt-20 mb-32 text-center text-3xl font-bold text-gray-800">Bon De Livraison</h1>
 
-	<div class="mb-6 grid grid-cols-2 gap-72">
-		<div>
+	<div class="mb-6 grid grid-cols-2 gap-20">
+		<div class="">
 			<p class="font-semibold">Receipt ID: <span class="font-normal">{page.params.id}</span></p>
 			<p class="font-semibold">
 				Date: <span class="font-normal"
-					>{findLivraisonById(page.params.id)?.Date.toString().split('T')[0]}</span
-				>
+					>{findLivraisonById(page.params.id)?.Date.toString().split('T')[0]}</span>
 			</p>
 		</div>
-		<div>
+		<div class="">
 			<p class="font-semibold">
 				Client: <span class="font-normal">{findLivraisonById(page.params.id)?.ClientName}</span>
 			</p>
 			<p class="font-semibold">
 				Client Tel: <span class="font-normal"
-					>{findLivraisonById(page.params.id)?.Cleinttelephone}</span
-				>
+					>{findLivraisonById(page.params.id)?.Cleinttelephone}</span>
 			</p>
 		</div>
 	</div>
 
-	<div class="mb-6 grid grid-cols-2 gap-72">
+	<div class="mb-6 grid grid-cols-2 gap-20">
 		<div class="">
 			<p>
 				<span class="font-semibold">Chauffeur:</span>
@@ -105,12 +101,10 @@
 			<tr>
 				<td class="border-t p-2">Botte Ensilage</td>
 				<td class="border-t p-2 text-right"
-					>${findLivraisonById(page.params.id)?.UnitPrice.toFixed(2)}</td
-				>
+					>${findLivraisonById(page.params.id)?.UnitPrice.toFixed(2)}</td>
 				<td class="border-t p-2 text-right">{findLivraisonById(page.params.id)?.Quantity}</td>
 				<td class="border-t p-2 text-right"
-					>${findLivraisonById(page.params.id)?.Total.toFixed(2)}</td
-				>
+					>${findLivraisonById(page.params.id)?.Total.toFixed(2)}</td>
 			</tr>
 		</tbody>
 	</table>

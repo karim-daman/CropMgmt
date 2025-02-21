@@ -1,8 +1,9 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	import { history, pointages } from '../../lib/stores';
+	import { history, initializePointagesStore, pointages } from '../../lib/stores';
 	import { type Action, type PointageRow } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
+	import { onMount } from 'svelte';
 
 	let newRow: PointageRow = {
 		ID: Date.now(),
@@ -10,6 +11,12 @@
 		startDate: new Date(),
 		missedDays: 0
 	};
+
+	onMount(async () => {
+		if ($pointages.length == 0) {
+			await initializePointagesStore();
+		}
+	});
 
 	function addRow() {
 		if (!newRow.name) {
@@ -101,10 +108,10 @@
 <div class="rounded bg-white p-6 shadow">
 	<div class="flex justify-between">
 		<h1 class="mb-4 text-2xl font-bold">Pointage</h1>
-		<p class="text-xs">(fields that have * are mandatory)</p>
+		<p class="no-print text-xs">(fields that have * are mandatory)</p>
 	</div>
 
-	<div class="mb-4 grid grid-cols-4 gap-4">
+	<div class="no-print mb-4 grid grid-cols-4 gap-4">
 		<div class="relative">
 			<input
 				type="text"
@@ -168,14 +175,15 @@
 		{/if}
 	</div>
 
-	<div class="target h-[55vh] overflow-y-auto">
+	<div class="target h-[55vh] overflow-y-auto print:h-auto print:overflow-visible">
 		<table class="w-full">
 			<thead>
 				<tr class="bg-gray-100">
 					<th class="p-2 text-left">Name</th>
 					<th class="p-2 text-left">Start Date</th>
 					<th class="p-2 text-left">Missed Days</th>
-					<th class="p-2 text-left">Actions</th>
+					<th class="p-2 text-left">Total Days</th>
+					<th class="no-print p-2 text-left">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -187,10 +195,20 @@
 						<td class="p-2">{row.name}</td>
 						<td class="p-2">{new Date(row.startDate).toLocaleDateString()}</td>
 						<td class="p-2">{row.missedDays}</td>
+
 						<td class="p-2">
+							{Math.floor(
+								(new Date().valueOf() - new Date(row.startDate).valueOf()) / (1000 * 60 * 60 * 24) -
+									row.missedDays
+							)}
+						</td>
+
+						<td class="no-print p-2">
 							<DeleteModal ID={row.ID} />
 
-							<!-- svelte-ignore a11y_consider_explicit_label -->
+							<!-- 
+								svelte-ignore a11y_consider_explicit_label 
+							 -->
 							<button
 								onclick={() => {
 									edit(row);

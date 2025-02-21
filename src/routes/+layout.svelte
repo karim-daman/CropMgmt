@@ -1,9 +1,13 @@
-<!-- <script lang="ts">
+<!--
+
+<script lang="ts">
 	import '../app.css';
 	let { children } = $props();
 </script>
 
-{@render children()} -->
+{@render children()} 
+
+-->
 
 <script lang="ts">
 	import '../app.css';
@@ -21,3 +25,6 @@
 <main class="mx-auto max-w-7xl px-4 py-6">
 	<slot />
 </main>
+
+<a href="/test_security">.</a>
+<a href="/test">hardware</a>

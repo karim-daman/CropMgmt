@@ -1,8 +1,9 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	import { history, livraisons } from '../../lib/stores';
+	import { history, initializeLivraisonsStore, livraisons } from '../../lib/stores';
 	import { type Action, type LivraisonRow } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
+	import { onMount } from 'svelte';
 
 	let newRow: LivraisonRow = {
 		ID: '',
@@ -20,6 +21,12 @@
 		Quantity: 0,
 		Total: 0
 	};
+
+	onMount(async () => {
+		if ($livraisons.length == 0) {
+			await initializeLivraisonsStore();
+		}
+	});
 
 	function addRow() {
 		if (
@@ -76,7 +83,7 @@
 
 	function edit(currentRow: LivraisonRow) {
 		oldRow = currentRow;
-		console.log(JSON.stringify(currentRow, null, 2));
+		console.log(JSON.stringify(currentRow.Date, null, 2));
 
 		editMode = true;
 
@@ -161,10 +168,10 @@
 <div class="rounded-lg bg-white p-6 shadow">
 	<div class="flex justify-between">
 		<h1 class="mb-4 text-2xl font-bold">Livraison</h1>
-		<p class="text-xs">(fields that have * are mandatory)</p>
+		<p class="no-print text-xs">(fields that have * are mandatory)</p>
 	</div>
 
-	<div class="mb-4 grid grid-cols-3 gap-4">
+	<div class="no-print mb-4 grid grid-cols-3 gap-4">
 		<div class="space-y-2">
 			<div class="relative">
 				<input
@@ -326,7 +333,7 @@
 		</div>
 	</div>
 
-	<div class="target h-[55vh] overflow-y-auto">
+	<div class="target h-[55vh] overflow-y-auto print:h-auto print:overflow-visible">
 		<table class=" w-full {editMode ? ' pointer-events-none ' : ''}">
 			<thead>
 				<tr class="bg-gray-100">
@@ -338,7 +345,7 @@
 					<th class="p-2 text-left">Price</th>
 					<th class="p-2 text-left">Qty</th>
 					<th class="p-2 text-left">Total</th>
-					<th class="p-2 text-left">Actions</th>
+					<th class="no-print p-2 text-left">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -346,7 +353,7 @@
 
 				{#each $livraisons as row}
 					<tr
-						class="border-b {oldRow?.ID != row.ID && editMode
+						class="border-b print:text-xs {oldRow?.ID != row.ID && editMode
 							? ' pointer-events-none blur-xs'
 							: ''} ">
 						<td class="p-2">{new Date(row.Date).toLocaleDateString()}</td>
@@ -357,7 +364,7 @@
 						<td class="p-2">{row.UnitPrice}</td>
 						<td class="p-2">{row.Quantity}</td>
 						<td class="p-2">{row.Total}</td>
-						<td class="flex p-2">
+						<td class="no-print flex p-2">
 							<!-- svelte-ignore a11y_consider_explicit_label -->
 							<a href="/livraison/{row.ID}" class="pressable mr-1 size-6 rounded-sm border"
 								><svg

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { toast } from 'svelte-5-french-toast';
-	import { clients, history } from '../../lib/stores';
+	import { clients, history, initializeClientsStore } from '../../lib/stores';
 	import { type Action, type ClientRow } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
+	import { onMount } from 'svelte';
 
 	let newRow: ClientRow = {
 		id: 0,
@@ -12,6 +13,12 @@
 		datefrom: '',
 		dateto: ''
 	};
+
+	onMount(async () => {
+		if ($clients.length == 0) {
+			await initializeClientsStore();
+		}
+	});
 
 	function addRow() {
 		if (!newRow.name || !newRow.pivot || !newRow.datefrom) {
@@ -113,10 +120,10 @@
 <div class="rounded bg-white p-6 shadow">
 	<div class="flex justify-between">
 		<h1 class="mb-4 text-2xl font-bold">Clients</h1>
-		<p class="text-xs">(fields that have * are mandatory)</p>
+		<p class="no-print text-xs">(fields that have * are mandatory)</p>
 	</div>
 
-	<div class="mb-4 grid grid-cols-6 gap-4">
+	<div class="no-print mb-4 grid grid-cols-6 gap-4">
 		<div class="relative">
 			<input
 				type="text"
@@ -182,7 +189,7 @@
 		</div>
 
 		{#if editMode}
-			<div class="flex justify-between">
+			<div class=" flex justify-between">
 				<button
 					onclick={save}
 					class="pressable mr-0.5 w-full cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
@@ -204,7 +211,7 @@
 		{/if}
 	</div>
 
-	<div class="target h-[55vh] overflow-y-auto">
+	<div class="target h-[55vh] overflow-y-auto print:h-auto print:overflow-visible">
 		<table class="w-full">
 			<thead>
 				<tr class="bg-gray-100">
@@ -213,7 +220,7 @@
 					<th class="p-2 text-left">Total Botte</th>
 					<th class="p-2 text-left">Date From</th>
 					<th class="p-2 text-left">Date To</th>
-					<th class="p-2 text-left">Actions</th>
+					<th class="no-print p-2 text-left">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -224,7 +231,7 @@
 						<td class="p-2">{row.totalBotte}</td>
 						<td class="p-2">{row.datefrom}</td>
 						<td class="p-2">{row.dateto}</td>
-						<td class="p-2">
+						<td class="no-print p-2">
 							<!-- svelte-ignore a11y_consider_explicit_label -->
 
 							<DeleteModal ID={row.id} />

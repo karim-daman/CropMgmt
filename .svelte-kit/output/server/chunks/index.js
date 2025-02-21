@@ -1,5 +1,5 @@
 import { clsx as clsx$1 } from "clsx";
-const DEV = false;
+const BROWSER = false;
 var is_array = Array.isArray;
 var index_of = Array.prototype.indexOf;
 var array_from = Array.from;
@@ -684,8 +684,8 @@ function update_effect(effect2) {
     effect2.wv = write_version;
     var deps = effect2.deps;
     var dep;
-    if (DEV && tracing_mode_flag && (effect2.f & DIRTY) !== 0 && deps !== null) ;
-    if (DEV) ;
+    if (BROWSER && tracing_mode_flag && (effect2.f & DIRTY) !== 0 && deps !== null) ;
+    if (BROWSER) ;
   } catch (error) {
     handle_error(error, effect2, previous_effect, previous_component_context || effect2.ctx);
   } finally {
@@ -852,7 +852,7 @@ function flush_sync(fn) {
     }
     flush_count = 0;
     last_scheduled_effect = null;
-    if (DEV) ;
+    if (BROWSER) ;
     return result;
   } finally {
     scheduler_mode = previous_scheduler_mode;
@@ -1203,11 +1203,11 @@ function ensure_array_like(array_like_or_iterator) {
   return [];
 }
 export {
-  spread_props as $,
+  spread_attributes as $,
   clear_text_content as A,
-  BLOCK_EFFECT as B,
+  BROWSER as B,
   CLEAN as C,
-  DEV as D,
+  DIRTY as D,
   array_from as E,
   component_root as F,
   is_passive_event as G,
@@ -1227,31 +1227,31 @@ export {
   UNOWNED as U,
   setContext as V,
   pop as W,
-  current_component as X,
-  getContext as Y,
-  add_styles as Z,
-  escape_html as _,
-  DIRTY as a,
-  spread_attributes as a0,
-  attr as a1,
-  merge_styles as a2,
-  stringify as a3,
-  store_get as a4,
-  ensure_array_like as a5,
-  unsubscribe_stores as a6,
-  slot as a7,
-  fallback as a8,
-  bind_props as a9,
-  noop as aa,
+  getContext as X,
+  add_styles as Y,
+  escape_html as Z,
+  spread_props as _,
+  set_signal_status as a,
+  attr as a0,
+  merge_styles as a1,
+  stringify as a2,
+  store_get as a3,
+  ensure_array_like as a4,
+  unsubscribe_stores as a5,
+  slot as a6,
+  fallback as a7,
+  bind_props as a8,
+  noop as a9,
+  current_component as aa,
   safe_not_equal as ab,
   subscribe_to_store as ac,
   run_all as ad,
-  set_signal_status as b,
-  DERIVED as c,
-  schedule_effect as d,
+  DERIVED as b,
+  schedule_effect as c,
+  active_reaction as d,
   equals as e,
-  active_reaction as f,
-  is_runes as g,
+  is_runes as f,
+  BLOCK_EFFECT as g,
   derived_sources as h,
   increment_write_version as i,
   state_unsafe_mutation as j,

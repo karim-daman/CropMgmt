@@ -87,61 +87,57 @@ async function loadFromFile<T>(filename: string): Promise<T[]> {
 	}
 }
 
-// Load stores from files
-export async function loadStores() {
-	try {
-		const [achatsData, clientsData, entretiensData, livraisonsData, pointagesData, historyData] =
-			await Promise.all([
-				loadFromFile<AchatRow>('achats'),
-				loadFromFile<ClientRow>('clients'),
-				loadFromFile<Card>('entretiens'),
-				loadFromFile<LivraisonRow>('livraisons'),
-				loadFromFile<PointageRow>('pointages'),
-				loadFromFile<Action>('history')
-			]);
+let initialized = false;
 
-		return { achatsData, clientsData, entretiensData, livraisonsData, pointagesData, historyData };
+// Initialize a single store with data from a file
+async function initializeStore<T>(store: any, filename: string, setter: (data: T[]) => void) {
+	try {
+		const data = await loadFromFile<T>(filename);
+		setter(data);
+		store.subscribe((data: T[]) => saveToFile(data, filename));
 	} catch (error) {
-		console.error('Error loading stores:', error);
-		return {
-			achatsData: [],
-			clientsData: [],
-			entretiensData: [],
-			livraisonsData: [],
-			pointagesData: [],
-			historyData: []
-		};
+		console.error(`Error initializing ${filename} store:`, error);
 	}
 }
 
-let initialized = false;
+// Individual store initialization functions
+export async function initializeAchatsStore() {
+	await initializeStore(achats, 'achats', achats.set);
+}
 
-// Initialize stores with data from files
-export async function initializeStores() {
+export async function initializeClientsStore() {
+	await initializeStore(clients, 'clients', clients.set);
+}
+
+export async function initializeEntretiensStore() {
+	await initializeStore(entretiens, 'entretiens', entretiens.set);
+}
+
+export async function initializeLivraisonsStore() {
+	await initializeStore(livraisons, 'livraisons', livraisons.set);
+}
+
+export async function initializePointagesStore() {
+	await initializeStore(pointages, 'pointages', pointages.set);
+}
+
+export async function initializeHistoryStore() {
+	await initializeStore(history, 'history', history.set);
+}
+
+// Initialize all stores (optional, if you still need a global initialization)
+export async function initializeAllStores() {
 	if (initialized) return;
 
 	try {
-		const { achatsData, clientsData, entretiensData, livraisonsData, pointagesData, historyData } =
-			await loadStores();
-
-		// Set initial values for stores
-		achats.set(achatsData);
-		clients.set(clientsData);
-		entretiens.set(entretiensData);
-		livraisons.set(livraisonsData);
-		pointages.set(pointagesData);
-		history.set(historyData);
-
-		// Set up subscriptions after initial load
-		achats.subscribe((data) => saveToFile(data, 'achats'));
-		clients.subscribe((data) => saveToFile(data, 'clients'));
-		entretiens.subscribe((data) => saveToFile(data, 'entretiens'));
-		livraisons.subscribe((data) => saveToFile(data, 'livraisons'));
-		pointages.subscribe((data) => saveToFile(data, 'pointages'));
-		history.subscribe((data) => saveToFile(data, 'history'));
+		await initializeAchatsStore();
+		await initializeClientsStore();
+		await initializeEntretiensStore();
+		await initializeLivraisonsStore();
+		await initializePointagesStore();
+		await initializeHistoryStore();
 	} catch (error) {
 		console.error('Error initializing stores:', error);
 	}
-
 	initialized = true;
 }

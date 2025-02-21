@@ -1,5 +1,5 @@
 import { s as stores } from "./client.js";
-import { Y as getContext } from "./index.js";
+import { X as getContext } from "./index.js";
 ({
   check: stores.updated.check
 });

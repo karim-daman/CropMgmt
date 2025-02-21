@@ -21,5 +21,11 @@
 	],
 	"/pointage": [
 		"src/routes/+layout.ts"
+	],
+	"/test_security": [
+		"src/routes/+layout.ts"
+	],
+	"/test": [
+		"src/routes/+layout.ts"
 	]
 }

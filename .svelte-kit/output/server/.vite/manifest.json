@@ -35,6 +35,13 @@
     "file": "chunks/exports.js",
     "name": "exports"
   },
+  "_index-server.js": {
+    "file": "chunks/index-server.js",
+    "name": "index-server",
+    "imports": [
+      "_index.js"
+    ]
+  },
   "_index.js": {
     "file": "chunks/index.js",
     "name": "index"
@@ -98,10 +105,11 @@
     "imports": [
       "_index.js",
       "_client.js",
-      "_Toaster.svelte_svelte_type_style_lang.js"
+      "_Toaster.svelte_svelte_type_style_lang.js",
+      "_index-server.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.DWjcxmnP.css"
+      "_app/immutable/assets/_layout.DAwnyb_b.css"
     ]
   },
   "src/routes/+layout.ts": {
@@ -121,7 +129,7 @@
       "_Toaster.svelte_svelte_type_style_lang.js"
     ],
     "css": [
-      "_app/immutable/assets/_page.CvTLU8Wa.css"
+      "_app/immutable/assets/_page.CoVnG7gj.css"
     ]
   },
   "src/routes/achats/+page.svelte": {
@@ -197,6 +205,17 @@
       "_index.js",
       "_Toaster.svelte_svelte_type_style_lang.js",
       "_stores.js"
+    ]
+  },
+  "src/routes/test_security/+page.svelte": {
+    "file": "entries/pages/test_security/_page.svelte.js",
+    "name": "entries/pages/test_security/_page.svelte",
+    "src": "src/routes/test_security/+page.svelte",
+    "isEntry": true,
+    "imports": [
+      "_index.js",
+      "_index-server.js",
+      "_Toaster.svelte_svelte_type_style_lang.js"
     ]
   }
 }

@@ -1,8 +1,9 @@
 <script lang="ts">
 	import toast from 'svelte-5-french-toast';
-	import { entretiens, history } from '../../lib/stores';
+	import { entretiens, history, initializeEntretiensStore } from '../../lib/stores';
 	import { type Action, type Card } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
+	import { onMount } from 'svelte';
 
 	let selectedCompany: 'Cnh' | 'Goweil' = 'Cnh'; // Explicitly type selectedCompany
 	const companies = ['Cnh', 'Goweil'];
@@ -14,6 +15,12 @@
 		status: 'open',
 		description: ''
 	};
+
+	onMount(async () => {
+		if ($entretiens[selectedCompany] == undefined) {
+			await initializeEntretiensStore();
+		}
+	});
 
 	function addCard() {
 		if (!selectedCompany || !newCard.description || !newCard.dueDate) {
@@ -118,7 +125,7 @@
 <div class="rounded bg-white p-6 shadow">
 	<div class="flex justify-between">
 		<h1 class="mb-4 text-2xl font-bold">Entretien</h1>
-		<p class="text-xs">(fields that have * are mandatory)</p>
+		<p class="no-print text-xs">(fields that have * are mandatory)</p>
 	</div>
 
 	<div class="mb-4">
@@ -136,7 +143,7 @@
 		</div>
 	</div>
 
-	<div class="mb-4 grid grid-cols-4 gap-4">
+	<div class="no-print mb-4 grid grid-cols-4 gap-4">
 		<div class="relative">
 			<input
 				type="datetime-local"
@@ -188,7 +195,8 @@
 	</div>
 
 	<!-- Display Cards -->
-	<div class="target grid h-[55vh] grid-cols-3 gap-4 overflow-y-auto">
+	<div
+		class="target grid h-[55vh] grid-cols-3 gap-4 overflow-y-auto print:h-auto print:overflow-visible">
 		{#each $entretiens[selectedCompany] as card}
 			<div class="rounded p-4 shadow {statusColor(card.status)}">
 				<div class="mb-2 flex items-start justify-between">

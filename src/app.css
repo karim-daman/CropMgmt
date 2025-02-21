@@ -23,3 +23,9 @@
 .target {
 	scrollbar-gutter: stable;
 }
+
+@media print {
+	.no-print {
+		display: none;
+	}
+}
