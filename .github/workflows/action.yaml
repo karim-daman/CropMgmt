@@ -22,20 +22,29 @@
 #         uses: dtolnay/rust-toolchain@stable
 
 #       - name: install frontend dependencies
-#         run: npm install # change this to npm, pnpm or bun depending on which one you use.
+#         run: npm install
 
-#       - uses: tauri-apps/tauri-action@v0
+#       - name: Build and release
+#         uses: tauri-apps/tauri-action@v0
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-#           # you might also need to add app signing secrets here
 #         with:
 #           tagName: v__VERSION__
 #           releaseName: 'App v__VERSION__'
 #           releaseBody: 'See the assets to download this version and install.'
-#           includeUpdaterJson: true # this will include the latest.json file in the release
+#           includeUpdaterJson: true
+#           updaterJsonPreferNsis: true # Prefer NSIS installer for Windows updates
+#           updaterJsonKeepUniversal: true # Keep the universal installer in latest.json
 #           releaseDraft: true
 #           prerelease: false
+
+#       # Optional: Upload latest.json as an artifact for verification
+#       - name: Upload latest.json
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: latest-json
+#           path: src-tauri/target/release/latest.json
 
 name: 'publish'
 
@@ -63,24 +72,57 @@ jobs:
       - name: install frontend dependencies
         run: npm install
 
+      # Get the version from package.json
+      - name: Get version
+        id: version
+        run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+        shell: bash
+
       - name: Build and release
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         with:
-          tagName: v__VERSION__
-          releaseName: 'App v__VERSION__'
+          tagName: v${{ env.PACKAGE_VERSION }}
+          releaseName: 'App v${{ env.PACKAGE_VERSION }}'
           releaseBody: 'See the assets to download this version and install.'
           includeUpdaterJson: true
-          updaterJsonPreferNsis: true # Prefer NSIS installer for Windows updates
-          updaterJsonKeepUniversal: true # Keep the universal installer in latest.json
+          updaterJsonPreferNsis: true
+          updaterJsonKeepUniversal: true
           releaseDraft: true
           prerelease: false
 
-      # Optional: Upload latest.json as an artifact for verification
-      - name: Upload latest.json
+      # Create latest.json manually
+      - name: Create latest.json
+        run: |
+          echo "{
+            \"version\": \"${{ env.PACKAGE_VERSION }}\",
+            \"notes\": \"See the assets to download this version and install.\",
+            \"pub_date\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+            \"platforms\": {
+              \"windows-x86_64\": {
+                \"signature\": \"\",
+                \"url\": \"https://github.com/${{ github.repository }}/releases/download/v${{ env.PACKAGE_VERSION }}/${{ github.event.repository.name }}_${{ env.PACKAGE_VERSION }}_x64-setup.exe\"
+              }
+            }
+          }" > latest.json
+        shell: bash
+
+      # Upload latest.json to the release
+      - name: Upload latest.json to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./latest.json
+          asset_name: latest.json
+          asset_content_type: application/json
+
+      # Optional: Upload as artifact for verification
+      - name: Upload latest.json as artifact
         uses: actions/upload-artifact@v4
         with:
           name: latest-json
-          path: src-tauri/target/release/latest.json
+          path: latest.json
