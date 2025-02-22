@@ -45,7 +45,7 @@
 			},
 			{
 				title: 'entretiens',
-				value: ($entretiens?.Cnh.length || 0) + ($entretiens?.Goweil.length || 0),
+				value: ($entretiens?.Cnh?.length || 0) + ($entretiens?.Goweil?.length || 0),
 				icon: 'briefcase'
 			},
 			{
