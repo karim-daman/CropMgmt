@@ -114,6 +114,14 @@
 		"fs:default",
 		"fs:read-all",
 		"fs:read-app-specific-dirs-recursive",
-		"fs:read-files"
+		"fs:read-files",
+
+		"dialog:default",
+		"dialog:allow-ask",
+		"dialog:allow-message",
+		"updater:default",
+		"updater:allow-check",
+		"updater:allow-download-and-install",
+		"process:allow-restart"
 	]
 }
