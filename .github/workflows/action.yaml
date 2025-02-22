@@ -45,7 +45,6 @@
 #         with:
 #           name: latest-json
 #           path: src-tauri/target/release/latest.json
-
 name: 'publish'
 
 on:
@@ -78,6 +77,19 @@ jobs:
         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
         shell: bash
 
+      # Create the release first
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.PACKAGE_VERSION }}
+          release_name: App v${{ env.PACKAGE_VERSION }}
+          body: 'See the assets to download this version and install.'
+          draft: true
+          prerelease: false
+
       - name: Build and release
         uses: tauri-apps/tauri-action@v0
         env:
@@ -109,7 +121,7 @@ jobs:
           }" > latest.json
         shell: bash
 
-      # Upload latest.json to the release
+      # Now we can use the upload_url from the create_release step
       - name: Upload latest.json to release
         uses: actions/upload-release-asset@v1
         env:
@@ -120,7 +132,6 @@ jobs:
           asset_name: latest.json
           asset_content_type: application/json
 
-      # Optional: Upload as artifact for verification
       - name: Upload latest.json as artifact
         uses: actions/upload-artifact@v4
         with:
