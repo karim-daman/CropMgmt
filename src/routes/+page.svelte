@@ -22,14 +22,13 @@
 		General?: any[];
 	}
 
-	const achat = $achats as Achats;
-
 	interface Entretiens {
 		Cnh?: any[];
 		Goweil?: any[];
 	}
 
-	const entretien = $entretiens as Entretiens;
+	$: achat = $achats as Achats;
+	$: entretien = $entretiens as Entretiens;
 
 	let historyArray: any;
 
