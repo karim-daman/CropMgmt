@@ -1,3 +1,42 @@
+# name: 'publish'
+
+# on:
+#   push:
+#     branches:
+#       - release
+
+# jobs:
+#   publish-tauri:
+#     permissions:
+#       contents: write
+#     runs-on: windows-latest
+#     steps:
+#       - uses: actions/checkout@v4
+
+#       - name: setup node
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: lts/*
+
+#       - name: install Rust stable
+#         uses: dtolnay/rust-toolchain@stable
+
+#       - name: install frontend dependencies
+#         run: npm install # change this to npm, pnpm or bun depending on which one you use.
+
+#       - uses: tauri-apps/tauri-action@v0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+#           # you might also need to add app signing secrets here
+#         with:
+#           tagName: v__VERSION__
+#           releaseName: 'App v__VERSION__'
+#           releaseBody: 'See the assets to download this version and install.'
+#           includeUpdaterJson: true # this will include the latest.json file in the release
+#           releaseDraft: true
+#           prerelease: false
+
 name: 'publish'
 
 on:
@@ -22,17 +61,26 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: install frontend dependencies
-        run: npm install # change this to npm, pnpm or bun depending on which one you use.
+        run: npm install
 
-      - uses: tauri-apps/tauri-action@v0
+      - name: Build and release
+        uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          # you might also need to add app signing secrets here
         with:
           tagName: v__VERSION__
           releaseName: 'App v__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
-          includeUpdaterJson: true # this will include the latest.json file in the release
+          includeUpdaterJson: true
+          updaterJsonPreferNsis: true # Prefer NSIS installer for Windows updates
+          updaterJsonKeepUniversal: true # Keep the universal installer in latest.json
           releaseDraft: true
           prerelease: false
+
+      # Optional: Upload latest.json as an artifact for verification
+      - name: Upload latest.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest-json
+          path: src-tauri/target/release/latest.json
