@@ -24,27 +24,73 @@
 #       - name: install frontend dependencies
 #         run: npm install
 
+#       # Get the version from package.json
+#       - name: Get version
+#         id: version
+#         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+#         shell: bash
+
+#       # Create the release first
+#       - name: Create Release
+#         id: create_release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           tag_name: v${{ env.PACKAGE_VERSION }}
+#           release_name: App v${{ env.PACKAGE_VERSION }}
+#           body: 'See the assets to download this version and install.'
+#           draft: true
+#           prerelease: false
+
 #       - name: Build and release
 #         uses: tauri-apps/tauri-action@v0
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
 #         with:
-#           tagName: v__VERSION__
-#           releaseName: 'App v__VERSION__'
+#           tagName: v${{ env.PACKAGE_VERSION }}
+#           releaseName: 'App v${{ env.PACKAGE_VERSION }}'
 #           releaseBody: 'See the assets to download this version and install.'
 #           includeUpdaterJson: true
-#           updaterJsonPreferNsis: true # Prefer NSIS installer for Windows updates
-#           updaterJsonKeepUniversal: true # Keep the universal installer in latest.json
+#           updaterJsonPreferNsis: true
+#           updaterJsonKeepUniversal: true
 #           releaseDraft: true
 #           prerelease: false
 
-#       # Optional: Upload latest.json as an artifact for verification
-#       - name: Upload latest.json
+#       # Create latest.json manually
+#       - name: Create latest.json
+#         run: |
+#           echo "{
+#             \"version\": \"${{ env.PACKAGE_VERSION }}\",
+#             \"notes\": \"See the assets to download this version and install.\",
+#             \"pub_date\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+#             \"platforms\": {
+#               \"windows-x86_64\": {
+#                 \"signature\": \"\",
+#                 \"url\": \"https://github.com/${{ github.repository }}/releases/download/v${{ env.PACKAGE_VERSION }}/${{ github.event.repository.name }}_${{ env.PACKAGE_VERSION }}_x64-setup.exe\"
+#               }
+#             }
+#           }" > latest.json
+#         shell: bash
+
+#       # Now we can use the upload_url from the create_release step
+#       - name: Upload latest.json to release
+#         uses: actions/upload-release-asset@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           upload_url: ${{ steps.create_release.outputs.upload_url }}
+#           asset_path: ./latest.json
+#           asset_name: latest.json
+#           asset_content_type: application/json
+
+#       - name: Upload latest.json as artifact
 #         uses: actions/upload-artifact@v4
 #         with:
 #           name: latest-json
-#           path: src-tauri/target/release/latest.json
+#           path: latest.json
+
 name: 'publish'
 
 on:
@@ -71,24 +117,10 @@ jobs:
       - name: install frontend dependencies
         run: npm install
 
-      # Get the version from package.json
       - name: Get version
         id: version
         run: echo "PACKAGE_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
         shell: bash
-
-      # Create the release first
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ env.PACKAGE_VERSION }}
-          release_name: App v${{ env.PACKAGE_VERSION }}
-          body: 'See the assets to download this version and install.'
-          draft: true
-          prerelease: false
 
       - name: Build and release
         uses: tauri-apps/tauri-action@v0
@@ -105,7 +137,7 @@ jobs:
           releaseDraft: true
           prerelease: false
 
-      # Create latest.json manually
+      # Create and commit latest.json to the main branch
       - name: Create latest.json
         run: |
           echo "{
@@ -121,19 +153,11 @@ jobs:
           }" > latest.json
         shell: bash
 
-      # Now we can use the upload_url from the create_release step
-      - name: Upload latest.json to release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./latest.json
-          asset_name: latest.json
-          asset_content_type: application/json
-
-      - name: Upload latest.json as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: latest-json
-          path: latest.json
+      - name: Commit latest.json
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add latest.json
+          git commit -m "Update latest.json to version ${{ env.PACKAGE_VERSION }}"
+          git push origin HEAD:main
+        shell: bash
