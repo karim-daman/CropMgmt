@@ -89,15 +89,34 @@ export async function initializeAllStores() {
 	try {
 		await ensureDataFolder(); // Only call once
 		await Promise.all([
-			initializeStore(achats, 'achats', achats.set),
-			initializeStore(clients, 'clients', clients.set),
-			initializeStore(entretiens, 'entretiens', entretiens.set),
-			initializeStore(livraisons, 'livraisons', livraisons.set),
-			initializeStore(pointages, 'pointages', pointages.set),
-			initializeStore(history, 'history', history.set)
+			initializeAchatsStore(),
+			initializeClientsStore(),
+			initializeEntretiensStore(),
+			initializeLivraisonsStore(),
+			initializePointagesStore(),
+			initializeHistoryStore()
 		]);
 	} catch (error) {
 		console.error('Error initializing stores:', error);
 	}
 	initialized = true;
+}
+
+export async function initializeAchatsStore() {
+	await initializeStore(achats, 'achats', achats.set);
+}
+export async function initializeClientsStore() {
+	await initializeStore(clients, 'clients', clients.set);
+}
+export async function initializeEntretiensStore() {
+	await initializeStore(entretiens, 'entretiens', entretiens.set);
+}
+export async function initializeLivraisonsStore() {
+	await initializeStore(livraisons, 'livraisons', livraisons.set);
+}
+export async function initializePointagesStore() {
+	await initializeStore(pointages, 'pointages', pointages.set);
+}
+export async function initializeHistoryStore() {
+	await initializeStore(history, 'history', history.set);
 }

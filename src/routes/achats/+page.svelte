@@ -7,7 +7,6 @@
 
 	let selectedCompany = 'Cnh';
 	const companies = ['Cnh', 'Goweil', 'General'];
-
 	let newRow: AchatRow = {
 		id: 0,
 		article: '',

@@ -190,8 +190,6 @@
 								}}
 								class="pressable cursor-pointer rounded-sm border bg-blue-200 px-6 hover:bg-blue-500 hover:text-white"
 								>Close All</button>
-						{:else}
-							empty
 						{/if}
 					</div>
 				</div>
