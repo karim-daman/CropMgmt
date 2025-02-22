@@ -16,6 +16,21 @@
 	let titles: string[] = ['achats', 'clients', 'entretiens', 'pointages', 'livraisons'];
 	let icons: any = [creditCard, user, wrench, calandar, truck];
 
+	interface Achats {
+		Cnh?: any[];
+		Goweil?: any[];
+		General?: any[];
+	}
+
+	const achat = $achats as Achats;
+
+	interface Entretiens {
+		Cnh?: any[];
+		Goweil?: any[];
+	}
+
+	const entretien = $entretiens as Entretiens;
+
 	let historyArray: any;
 
 	$: historyArray;
@@ -27,15 +42,11 @@
 			position: 'top-right'
 		});
 
-		console.log(JSON.stringify($achats));
-
 		stats = [
 			{
 				title: 'achats',
 				value:
-					($achats?.Cnh?.length || 0) +
-					($achats?.Goweil?.length || 0) +
-					($achats?.General?.length || 0),
+					(achat?.Cnh?.length || 0) + (achat?.Goweil?.length || 0) + (achat?.General?.length || 0),
 				icon: 'dollar-sign'
 			},
 			{
@@ -45,7 +56,7 @@
 			},
 			{
 				title: 'entretiens',
-				value: ($entretiens?.Cnh?.length || 0) + ($entretiens?.Goweil?.length || 0),
+				value: (entretien?.Cnh?.length || 0) + (entretien?.Goweil?.length || 0),
 				icon: 'briefcase'
 			},
 			{
@@ -79,7 +90,7 @@
 		// Convert hours to 12-hour format
 		hours = hours % 12;
 		hours = hours ? hours : 12; // Handle midnight (0 should be 12)
-		hours = hours.toString().padStart(2, '0');
+		hours = parseInt(hours.toString().padStart(2, '0'), 10);
 
 		return `${day}/${month}/${year} @ ${hours}:${minutes} ${ampm}`;
 	}
