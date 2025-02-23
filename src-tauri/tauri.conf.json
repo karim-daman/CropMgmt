@@ -1,7 +1,7 @@
 {
 	"$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
 	"productName": "application",
-	"version": "../package.json",
+	"version": "0.1.11",
 
 	"identifier": "com.tauri.app",
 	"build": {
