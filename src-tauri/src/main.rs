@@ -18,6 +18,7 @@ fn main() {
             app.handle().plugin(tauri_plugin_updater::Builder::new().build())?;
             Ok(())
         })
+        .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_process::init())
         .run(tauri::generate_context!())
@@ -25,3 +26,4 @@ fn main() {
 
         app_lib::run();
 }
+

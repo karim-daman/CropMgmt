@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Settings from './settings.svelte';
+
 	let selected = '';
 	let expandedLinks = false;
 
@@ -169,6 +171,7 @@
 						</svg>
 						Livraison</a>
 				</li>
+				<Settings />
 			</ul>
 		</div>
 
@@ -326,6 +329,7 @@
 						</svg>
 						Livraison</a>
 				</li>
+				<Settings />
 			</ul>
 		</div>
 	</div>

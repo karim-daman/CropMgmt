@@ -13,6 +13,7 @@
 	import { page } from '$app/stores';
 	import { Toaster } from 'svelte-5-french-toast';
 	import Navbar from '../components/navbar.svelte';
+	import Settings from '../components/settings.svelte';
 </script>
 
 <Toaster />
