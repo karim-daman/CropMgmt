@@ -161,35 +161,40 @@ jobs:
       # Update or create Gist
       - name: Update or Create Gist
         run: |
+          # Properly escape the JSON content for use in API request
+          CONTENT=$(cat latest.json | jq -r tostring)
+
           if [ -z "${{ secrets.GIST_ID }}" ]; then
             # Create new gist if GIST_ID is not set
-            RESPONSE=$(curl -X POST \
+            curl -X POST \
               -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
               -H "Content-Type: application/json" \
-              -d "{
-                \"files\": {
-                  \"latest.json\": {
-                    \"content\": $(cat latest.json)
-                  }
-                },
-                \"description\": \"Auto-updated latest.json for app updates\",
-                \"public\": true
-              }" \
-              https://api.github.com/gists)
-            echo "Created new gist. Please add the gist ID to your repository secrets as GIST_ID"
-            echo "GIST_ID=$(echo $RESPONSE | jq -r '.id')"
+              -d @- \
+              https://api.github.com/gists << EOF
+          {
+            "files": {
+              "latest.json": {
+                "content": $CONTENT
+              }
+            },
+            "description": "Auto-updated latest.json for app updates",
+            "public": true
+          }
+          EOF
           else
             # Update existing gist
             curl -X PATCH \
               -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
               -H "Content-Type: application/json" \
-              -d "{
-                \"files\": {
-                  \"latest.json\": {
-                    \"content\": $(cat latest.json)
-                  }
-                }
-              }" \
-              "https://api.github.com/gists/${{ secrets.GIST_ID }}"
+              -d @- \
+              "https://api.github.com/gists/${{ secrets.GIST_ID }}" << EOF
+          {
+            "files": {
+              "latest.json": {
+                "content": $CONTENT
+              }
+            }
+          }
+          EOF
           fi
         shell: bash
