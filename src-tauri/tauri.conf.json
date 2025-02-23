@@ -38,7 +38,7 @@
 	"plugins": {
 		"updater": {
 			"windows": {
-				"installMode": "passive"
+				"installMode": "basicUi"
 			},
 			"endpoints": [
 				"https://gist.githubusercontent.com/karim-daman/33c30036b257a52b1716eea5c6306633/raw/latest.json"
