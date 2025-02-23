@@ -91,9 +91,11 @@
 	}
 </script>
 
-<main>
-	<h1>App Version: {version}</h1>
-</main>
+<div>
+	<span
+		class="me-2 rounded-sm border border-purple-400 bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-gray-700 dark:text-purple-400"
+		>App Version: {version}</span>
+</div>
 
 <div class="updater-container">
 	{#if error}
