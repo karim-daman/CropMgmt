@@ -145,38 +145,55 @@ jobs:
       # Create latest.json content
       - name: Create latest.json
         run: |
-          echo '{
-            "version": "${{ env.PACKAGE_VERSION }}",
-            "notes": "See the assets to download this version and install.",
-            "pub_date": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
-            "platforms": {
-              "windows-x86_64": {
-                "signature": "",
-                "url": "https://github.com/${{ github.repository }}/releases/download/v${{ env.PACKAGE_VERSION }}/${{ github.event.repository.name }}_${{ env.PACKAGE_VERSION }}_x64-setup.exe"
+          echo "{
+            \"version\": \"${{ env.PACKAGE_VERSION }}\",
+            \"notes\": \"See the assets to download this version and install.\",
+            \"pub_date\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+            \"platforms\": {
+              \"windows-x86_64\": {
+                \"signature\": \"\",
+                \"url\": \"https://github.com/${{ github.repository }}/releases/download/v${{ env.PACKAGE_VERSION }}/${{ github.event.repository.name }}_${{ env.PACKAGE_VERSION }}_x64-setup.exe\"
               }
             }
-          }' > latest.json
+          }" > latest.json
         shell: bash
+
+      # Install jq for JSON processing
+      - name: Install jq
+        run: choco install jq -y
 
       # Update or create Gist
       - name: Update or Create Gist
         run: |
-          # Read the content and store it as a properly escaped string
-          CONTENT=$(cat latest.json | jq -r '@json')
-
           if [ -z "${{ secrets.GIST_ID }}" ]; then
             # Create new gist if GIST_ID is not set
-            curl -X POST \
+            RESPONSE=$(curl -X POST \
               -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
               -H "Content-Type: application/json" \
-              -d "{\"files\":{\"latest.json\":{\"content\":$CONTENT}},\"description\":\"Auto-updated latest.json for app updates\",\"public\":true}" \
-              https://api.github.com/gists
+              -d "{
+                \"files\": {
+                  \"latest.json\": {
+                    \"content\": $(jq -R -s '.' latest.json)
+                  }
+                },
+                \"description\": \"Auto-updated latest.json for app updates\",
+                \"public\": true
+              }" \
+              https://api.github.com/gists)
+            echo "Created new gist. Please add the gist ID to your repository secrets as GIST_ID"
+            echo "GIST_ID=$(echo $RESPONSE | jq -r '.id')"
           else
             # Update existing gist
             curl -X PATCH \
               -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
               -H "Content-Type: application/json" \
-              -d "{\"files\":{\"latest.json\":{\"content\":$CONTENT}}}" \
+              -d "{
+                \"files\": {
+                  \"latest.json\": {
+                    \"content\": $(jq -r '.' latest.json)
+                  }
+                }
+              }" \
               "https://api.github.com/gists/${{ secrets.GIST_ID }}"
           fi
         shell: bash
