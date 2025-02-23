@@ -1,7 +1,8 @@
 {
 	"$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
 	"productName": "application",
-	"version": "0.1.1",
+	"version": "../package.json",
+
 	"identifier": "com.tauri.app",
 	"build": {
 		"frontendDist": "../build",
