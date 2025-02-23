@@ -161,40 +161,22 @@ jobs:
       # Update or create Gist
       - name: Update or Create Gist
         run: |
-          # Properly escape the JSON content for use in API request
-          CONTENT=$(cat latest.json | jq -r tostring)
+          # Read the content and store it as a properly escaped string
+          CONTENT=$(cat latest.json | jq -r '@json')
 
           if [ -z "${{ secrets.GIST_ID }}" ]; then
             # Create new gist if GIST_ID is not set
             curl -X POST \
               -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
               -H "Content-Type: application/json" \
-              -d @- \
-              https://api.github.com/gists << EOF
-          {
-            "files": {
-              "latest.json": {
-                "content": $CONTENT
-              }
-            },
-            "description": "Auto-updated latest.json for app updates",
-            "public": true
-          }
-          EOF
+              -d "{\"files\":{\"latest.json\":{\"content\":$CONTENT}},\"description\":\"Auto-updated latest.json for app updates\",\"public\":true}" \
+              https://api.github.com/gists
           else
             # Update existing gist
             curl -X PATCH \
               -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
               -H "Content-Type: application/json" \
-              -d @- \
-              "https://api.github.com/gists/${{ secrets.GIST_ID }}" << EOF
-          {
-            "files": {
-              "latest.json": {
-                "content": $CONTENT
-              }
-            }
-          }
-          EOF
+              -d "{\"files\":{\"latest.json\":{\"content\":$CONTENT}}}" \
+              "https://api.github.com/gists/${{ secrets.GIST_ID }}"
           fi
         shell: bash
