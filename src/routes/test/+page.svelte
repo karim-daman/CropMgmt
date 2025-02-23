@@ -1,4 +1,10 @@
 <script>
+	import { getVersion } from '@tauri-apps/api/app';
+
+	let version = '';
+
+	getVersion().then((v) => (version = v));
+
 	import { check } from '@tauri-apps/plugin-updater';
 	import { relaunch } from '@tauri-apps/plugin-process';
 
@@ -80,6 +86,10 @@
 		}
 	}
 </script>
+
+<main>
+	<h1>App Version: {version}</h1>
+</main>
 
 <div class="updater-container">
 	{#if error}
