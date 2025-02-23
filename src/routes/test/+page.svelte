@@ -1,74 +1,151 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
-	import { check } from '@tauri-apps/plugin-updater';
+	import { check, type UpdateResult } from '@tauri-apps/plugin-updater';
 	import { relaunch } from '@tauri-apps/plugin-process';
+	import toast from 'svelte-5-french-toast';
 
-	let updateAvailable = false;
-	let updateVersion = '';
-	let updateDate = '';
-	let updateNotes = '';
-	let downloading = false;
-	let downloadProgress = 0;
-	let totalSize = 0;
-	let error = null;
+	/**
+	 * Interface defining the structure of download progress events
+	 */
+	interface DownloadEvent {
+		event: 'Started' | 'Progress' | 'Finished';
+		data: {
+			contentLength?: number;
+			chunkLength?: number;
+		};
+	}
 
-	async function checkForUpdates() {
+	/**
+	 * State management for update information
+	 */
+	let updateAvailable: boolean = false;
+	let updateVersion: string = '';
+	let updateDate: string = '';
+	let updateNotes: string = '';
+	let downloading: boolean = false;
+	let downloadProgress: number = 0;
+	let totalSize: number = 0;
+	let error: string | null = null;
+
+	/**
+	 * Checks for available updates by communicating with the update server
+	 * Sets update information if a new version is available
+	 */
+	async function checkForUpdates(): Promise<void> {
 		try {
-			const update = await check();
+			// Reset error state before checking
+			error = null;
+
+			// Attempt to fetch update information
+			const update: UpdateResult | null = await check();
 
 			if (update) {
+				// Update information found - populate the state
 				updateAvailable = true;
 				updateVersion = update.version;
 				updateDate = new Date(update.date).toLocaleDateString();
 				updateNotes = update.body;
+
+				console.log('Update found:', {
+					version: updateVersion,
+					date: updateDate,
+					notes: updateNotes
+				});
+
+				toast.success(
+					'Update found: \n' +
+						JSON.stringify(
+							{
+								version: updateVersion,
+								date: updateDate,
+								notes: updateNotes
+							},
+							null,
+							2
+						)
+				);
+			} else {
+				console.log('No updates available');
+				toast.success('No updates available ');
+				updateAvailable = false;
 			}
-		} catch (err) {
-			error = `Error checking for updates: ${err.message}`;
+		} catch (err: unknown) {
+			const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+			error = `Error checking for updates: ${errorMessage}`;
+			toast.success(`Error checking for updates: ${errorMessage}`);
+			console.error('Update check failed:', error);
 		}
 	}
 
-	async function downloadAndInstallUpdate() {
+	/**
+	 * Handles the download and installation of available updates
+	 * Includes progress tracking and automatic relaunch
+	 */
+	async function downloadAndInstallUpdate(): Promise<void> {
 		try {
-			const update = await check();
-			if (!update) return;
+			// Verify update is available before proceeding
+			const update: UpdateResult | null = await check();
+			if (!update) {
+				console.log('No update available to install');
+				toast.success('No update available to install');
+				return;
+			}
 
+			// Initialize download state
 			downloading = true;
 			downloadProgress = 0;
-			let downloaded = 0;
+			let downloaded: number = 0;
 
-			await update.downloadAndInstall((event) => {
+			// Start download and installation process
+			await update.downloadAndInstall((event: DownloadEvent) => {
 				switch (event.event) {
 					case 'Started':
-						totalSize = event.data.contentLength;
+						if (event.data.contentLength) {
+							totalSize = event.data.contentLength;
+							console.log('Download started. Total size:', totalSize);
+							toast.success('Download started. Total size: ' + totalSize);
+						}
 						break;
 					case 'Progress':
-						downloaded += event.data.chunkLength;
-						downloadProgress = (downloaded / totalSize) * 100;
+						if (event.data.chunkLength) {
+							downloaded += event.data.chunkLength;
+							downloadProgress = (downloaded / totalSize) * 100;
+							console.log(`Download progress: ${downloadProgress.toFixed(1)}%`);
+							toast.success(`Download progress: ${downloadProgress.toFixed(1)}%`);
+						}
 						break;
 					case 'Finished':
 						downloading = false;
+						console.log('Download completed');
+						toast.success('Download completed');
 						break;
 				}
 			});
 
+			// Relaunch application to apply update
+			console.log('Relaunching application...');
+			toast.success('Relaunching application...');
 			await relaunch();
-		} catch (err) {
-			error = `Error installing update: ${err.message}`;
+		} catch (err: unknown) {
+			const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+			error = `Error installing update: ${errorMessage}`;
 			downloading = false;
+			console.error('Update installation failed:', error);
+			toast.success('Update installation failed: ' + error);
 		}
 	}
-
-	// onMount(() => {
-	// 	checkForUpdates();
-	// });
 </script>
 
 <div class="update-container">
-	<button class="pressable rounded-sm border px-2" onclick={checkForUpdates}
-		>check for update</button>
+	<button
+		class="pressable rounded-sm border px-2"
+		on:click={checkForUpdates}
+		disabled={downloading}>
+		Check for Updates
+	</button>
 
 	{#if error}
-		<div class="error">
+		<div class="error" role="alert">
 			{error}
 		</div>
 	{/if}
@@ -84,11 +161,19 @@
 			</div>
 
 			{#if !downloading}
-				<button onclick={downloadAndInstallUpdate} class="update-button">
+				<button
+					on:click={downloadAndInstallUpdate}
+					class="update-button"
+					aria-label="Download and install update version {updateVersion}">
 					Download and Install
 				</button>
 			{:else}
-				<div class="progress-container">
+				<div
+					class="progress-container"
+					role="progressbar"
+					aria-valuenow={downloadProgress}
+					aria-valuemin="0"
+					aria-valuemax="100">
 					<div class="progress-bar" style="width: {downloadProgress}%"></div>
 					<span class="progress-text">
 						{downloadProgress.toFixed(1)}%
@@ -142,6 +227,11 @@
 
 	.update-button:hover {
 		background-color: #2563eb;
+	}
+
+	.update-button:disabled {
+		background-color: #9ca3af;
+		cursor: not-allowed;
 	}
 
 	.progress-container {
