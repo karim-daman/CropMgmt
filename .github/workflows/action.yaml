@@ -95,6 +95,7 @@
 #               "https://api.github.com/gists/${{ secrets.GIST_ID }}"
 #           fi
 #         shell: bash
+
 name: 'publish'
 
 on:
@@ -170,9 +171,20 @@ jobs:
       # Update or create Gist
       - name: Update or Create Gist
         run: |
+          # Function to log debug information
+          log_debug() {
+            echo "DEBUG: $1"
+          }
+
           # Check if GIST_ID is set
           if [ -z "${{ secrets.GIST_ID }}" ]; then
             echo "GIST_ID not set. Creating a new Gist..."
+
+            # Read latest.json content and encode it as JSON-safe string
+            LATEST_JSON_CONTENT=$(cat latest.json | jq -R -s @json)
+
+            # Log the encoded content for debugging
+            log_debug "Encoded latest.json content: $LATEST_JSON_CONTENT"
 
             # Create new Gist
             RESPONSE=$(curl -X POST \
@@ -181,7 +193,7 @@ jobs:
               -d "{
                 \"files\": {
                   \"latest.json\": {
-                    \"content\": \"$(cat latest.json | jq -R -s @json)\"
+                    \"content\": $LATEST_JSON_CONTENT
                   }
                 },
                 \"description\": \"Auto-updated latest.json for app updates\",
@@ -201,6 +213,12 @@ jobs:
           else
             echo "Updating existing Gist with ID: ${{ secrets.GIST_ID }}..."
 
+            # Read latest.json content and encode it as JSON-safe string
+            LATEST_JSON_CONTENT=$(cat latest.json | jq -R -s @json)
+
+            # Log the encoded content for debugging
+            log_debug "Encoded latest.json content: $LATEST_JSON_CONTENT"
+
             # Update existing Gist
             RESPONSE=$(curl -X PATCH \
               -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
@@ -208,7 +226,7 @@ jobs:
               -d "{
                 \"files\": {
                   \"latest.json\": {
-                    \"content\": \"$(cat latest.json | jq -R -s @json)\"
+                    \"content\": $LATEST_JSON_CONTENT
                   }
                 }
               }" \
