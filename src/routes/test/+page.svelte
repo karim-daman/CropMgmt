@@ -28,6 +28,10 @@
 			console.log('Checking for updates...');
 			const update = await check();
 
+			// console.log(JSON.stringify(update.rawJson.platforms['windows-x86_64'].url, null, 2));
+
+			console.log(JSON.stringify(update, null, 2));
+
 			if (update) {
 				console.log(`Update found: v${update.version} (${update.date})`);
 				console.log('Release notes:', update.body);

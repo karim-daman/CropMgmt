@@ -1,6 +1,6 @@
 {
 	"$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-	"productName": "application",
+	"productName": "CropMgmt",
 	"version": "0.1.13",
 
 	"identifier": "com.tauri.app",
@@ -13,7 +13,7 @@
 	"app": {
 		"windows": [
 			{
-				"title": "application",
+				"title": "CropMgmt",
 				"width": 800,
 				"height": 600,
 				"resizable": true,
