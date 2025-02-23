@@ -137,7 +137,7 @@ jobs:
           releaseDraft: true
           prerelease: false
 
-      # Create and commit latest.json to the main branch
+      # Create latest.json content
       - name: Create latest.json
         run: |
           echo "{
@@ -153,11 +153,38 @@ jobs:
           }" > latest.json
         shell: bash
 
-      - name: Commit latest.json
+      # Update or create Gist
+      - name: Update or Create Gist
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add latest.json
-          git commit -m "Update latest.json to version ${{ env.PACKAGE_VERSION }}"
-          git push origin HEAD:main
+          if [ -z "${{ secrets.GIST_ID }}" ]; then
+            # Create new gist if GIST_ID is not set
+            RESPONSE=$(curl -X POST \
+              -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"files\": {
+                  \"latest.json\": {
+                    \"content\": $(cat latest.json | jq -R -s '.')
+                  }
+                },
+                \"description\": \"Auto-updated latest.json for app updates\",
+                \"public\": true
+              }" \
+              https://api.github.com/gists)
+            echo "Created new gist. Please add the gist ID to your repository secrets as GIST_ID"
+            echo "GIST_ID=$(echo $RESPONSE | jq -r '.id')"
+          else
+            # Update existing gist
+            curl -X PATCH \
+              -H "Authorization: token ${{ secrets.GIST_TOKEN }}" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"files\": {
+                  \"latest.json\": {
+                    \"content\": $(cat latest.json | jq -r '.')
+                  }
+                }
+              }" \
+              "https://api.github.com/gists/${{ secrets.GIST_ID }}"
+          fi
         shell: bash

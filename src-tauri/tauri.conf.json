@@ -39,7 +39,9 @@
 			"windows": {
 				"installMode": "passive"
 			},
-			"endpoints": ["https://raw.githubusercontent.com/karim-daman/CropMgmt/main/latest.json"],
+			"endpoints": [
+				"https://gist.githubusercontent.com/karim-daman/${{ secrets.GIST_ID }}/raw/latest.json"
+			],
 			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDhENTAzOUYxQjVBMEI2MEEKUldRS3RxQzE4VGxRamRhdmNJNzNIckJ2MjcwOFAwd0NGYkRsbEM2aWdSeHYwcmRWWG9RZHFrK2MK"
 		}
 	}
