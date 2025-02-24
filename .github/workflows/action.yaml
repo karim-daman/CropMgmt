@@ -65,7 +65,7 @@ jobs:
             "platforms": {
               "windows-x86_64": {
                 "signature": "",
-                "url": "https://github.com/${{ github.repository }}/releases/download/v${{ env.PACKAGE_VERSION }}/CropMgmt_${{ env.PACKAGE_VERSION }}_x64-setup.exe"
+                "url": "https://github.com/${{ github.repository }}/releases/download/v${{ env.PACKAGE_VERSION }}/CropMgmt_${{ env.PACKAGE_VERSION }}_x64_en-US.msi"
               }
             }
           }

@@ -1,14 +1,10 @@
 <script>
 	import { getVersion } from '@tauri-apps/api/app';
-
-	let version = '';
-
-	getVersion().then((v) => (version = v));
-
 	import { check } from '@tauri-apps/plugin-updater';
 	import { relaunch } from '@tauri-apps/plugin-process';
 
 	// Reactive states
+	let version = '';
 	let checking = false;
 	let downloading = false;
 	let installing = false;
@@ -20,15 +16,19 @@
 	};
 	let updateInfo = null;
 
+	let update;
+
+	// Get the current version of the app
+	getVersion().then((v) => (version = v));
+
+	// Function to check for updates
 	async function checkForUpdates() {
 		checking = true;
 		error = null;
 
 		try {
 			console.log('Checking for updates...');
-			const update = await check();
-
-			// console.log(JSON.stringify(update.rawJson.platforms['windows-x86_64'].url, null, 2));
+			update = await check();
 
 			console.log(JSON.stringify(update, null, 2));
 
@@ -36,7 +36,6 @@
 				console.log(`Update found: v${update.version} (${update.date})`);
 				console.log('Release notes:', update.body);
 				updateInfo = update;
-				await handleUpdate(update);
 			} else {
 				console.log('No updates available');
 			}
@@ -48,9 +47,17 @@
 		}
 	}
 
-	async function handleUpdate(update) {
+	// Function to handle the update installation
+	async function installUpdate() {
+		if (!update) {
+			console.error('No update available to install');
+			return;
+		}
+
 		downloading = true;
 		progress = { downloaded: 0, total: 0, percentage: 0 };
+
+		console.log(update);
 
 		try {
 			await update.downloadAndInstall((event) => {
@@ -59,7 +66,6 @@
 						console.log(`Download started - Total size: ${event.data.contentLength} bytes`);
 						progress.total = event.data.contentLength;
 						break;
-
 					case 'Progress':
 						progress.downloaded += event.data.chunkLength;
 						progress.percentage = Math.round((progress.downloaded / progress.total) * 100);
@@ -67,7 +73,6 @@
 							`Download progress: ${progress.percentage}% (${progress.downloaded}/${progress.total} bytes)`
 						);
 						break;
-
 					case 'Finished':
 						console.log('Download completed successfully');
 						break;
@@ -78,13 +83,14 @@
 			installing = true;
 
 			// Small delay to ensure user sees the success message
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// await new Promise((resolve) => setTimeout(resolve, 1000));
 
 			console.log('Relaunching application...');
 			await relaunch();
 		} catch (err) {
 			console.error('Error during update process:', err);
-			error = `Update failed: ${err.message}`;
+			console.dir(err, { depth: null });
+			error = `Update failed: ${err}`;
 			downloading = false;
 			installing = false;
 		}
@@ -107,6 +113,17 @@
 
 	{#if checking}
 		<div class="status">Checking for updates...</div>
+	{:else if updateInfo}
+		<div class="update-info">
+			<h3>Update Available</h3>
+			<p>Version: {updateInfo.version}</p>
+			<p>Release Date: {updateInfo.date}</p>
+			<div class="release-notes">
+				<h4>Release Notes:</h4>
+				<p>{updateInfo.body}</p>
+			</div>
+			<button on:click={installUpdate}>Install Update</button>
+		</div>
 	{:else if downloading}
 		<div class="status">
 			<div class="download-progress">
@@ -121,22 +138,22 @@
 		</div>
 	{:else if installing}
 		<div class="status">Installing update...</div>
-	{:else if updateInfo}
-		<div class="update-info">
-			<h3>Update Available</h3>
-			<p>Version: {updateInfo.version}</p>
-			<p>Release Date: {updateInfo.date}</p>
-			<div class="release-notes">
-				<h4>Release Notes:</h4>
-				<p>{updateInfo.body}</p>
-			</div>
-		</div>
 	{:else}
 		<div class="check-update">
 			<button on:click={checkForUpdates}>Check for Updates</button>
 			{#if !error}
 				<span class="status">Click to check for updates</span>
 			{/if}
+		</div>
+	{/if}
+</div>
+
+<div class="w-full rounded-full bg-gray-200 dark:bg-gray-700">
+	{#if progress.percentage > 0}
+		<div
+			class="rounded-full bg-blue-600 p-0.5 text-center text-xs leading-none font-medium text-blue-100"
+			style="width: {progress.percentage}%">
+			{progress.percentage}%
 		</div>
 	{/if}
 </div>
