@@ -85,8 +85,9 @@ jobs:
           releaseName: 'App v${{ env.PACKAGE_VERSION }}'
           releaseBody: 'See the assets to download this version and install.'
           includeUpdaterJson: true
-          updaterJsonPreferNsis: true # This ensures NSIS format is preferred
-          args: --target nsis-x86_64-pc-windows-msvc # Explicitly target NSIS build
+          updaterJsonPreferNsis: true
+          tauriScript: npm run tauri
+          args: -- --target x86_64-pc-windows-msvc
           updaterJsonKeepUniversal: true
           releaseDraft: true
           prerelease: false
