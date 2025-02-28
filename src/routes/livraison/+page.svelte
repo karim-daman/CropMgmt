@@ -4,6 +4,7 @@
 	import { type Action, type LivraisonRow } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
 	import { onMount } from 'svelte';
+	import { translation } from '$lib/i18n';
 
 	let newRow: LivraisonRow = {
 		ID: '',
@@ -167,9 +168,26 @@
 
 <div class="rounded-lg bg-white p-6 shadow">
 	<div class="flex justify-between">
-		<h1 class="mb-4 text-2xl font-bold">Livraison</h1>
-		<p class="no-print text-xs">(fields that have * are mandatory)</p>
+		<h1 class="mb-4 text-2xl font-bold">{$translation('navbar.delivery')}</h1>
+		<p class="no-print text-xs">
+			({$translation('page.mandatory')})
+		</p>
 	</div>
+
+	<!-- 
+	
+	'delivery.input.date': 'تاريخ',
+		'delivery.input.clientName': 'اسم العميل',
+		'delivery.input.clientTel': 'هاتف العميل',
+		'delivery.input.driverName': 'اسم السائق',
+		'delivery.input.driverTel': 'هاتف السائق',
+		'delivery.input.driverPlateNum': 'رقم لوحة السائق',
+		'delivery.input.source': 'مصدر',
+		'delivery.input.destination': 'وجهة',
+		'delivery.input.unitPrice': 'سعر الوحدة',
+		'delivery.input.quantity': 'كمية'
+	
+	-->
 
 	<div class="no-print mb-4 grid grid-cols-3 gap-4">
 		<div class="space-y-2">
@@ -182,8 +200,8 @@
 					bind:value={newRow.Date} />
 				<label
 					for="floating_outlined"
-					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-					>Date *</label>
+					class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>{$translation('delivery.input.date')} *</label>
 			</div>
 
 			<div class="relative">
@@ -195,8 +213,8 @@
 					bind:value={newRow.ClientName} />
 				<label
 					for="floating_outlined"
-					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-					>ClientName *</label>
+					class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>{$translation('delivery.input.clientName')} *</label>
 			</div>
 
 			<div class="relative">
@@ -208,8 +226,8 @@
 					bind:value={newRow.Cleinttelephone} />
 				<label
 					for="floating_outlined"
-					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-					>Cleint Telephone *</label>
+					class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>{$translation('delivery.input.clientTel')} *</label>
 			</div>
 		</div>
 
@@ -223,8 +241,8 @@
 					bind:value={newRow.chauffeur.ChauffeurName} />
 				<label
 					for="floating_outlined"
-					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-					>Chauffeur Name *</label>
+					class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>{$translation('delivery.input.driverName')} *</label>
 			</div>
 
 			<div class="relative">
@@ -236,8 +254,8 @@
 					bind:value={newRow.chauffeur.ChauffeurTelephone} />
 				<label
 					for="floating_outlined"
-					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-					>Chauffeur Telephone *</label>
+					class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>{$translation('delivery.input.driverTel')} *</label>
 			</div>
 
 			<div class="relative">
@@ -249,8 +267,8 @@
 					bind:value={newRow.chauffeur.ChauffeurPlateNumber} />
 				<label
 					for="floating_outlined"
-					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-					>Chauffeur PlateNumber *</label>
+					class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+					>{$translation('delivery.input.driverPlateNum')} *</label>
 			</div>
 		</div>
 
@@ -264,8 +282,8 @@
 					bind:value={newRow.Source} />
 				<label
 					for="floating_outlined"
-					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
-					Source *</label>
+					class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+					{$translation('delivery.input.source')} *</label>
 			</div>
 
 			<div class="relative">
@@ -277,8 +295,8 @@
 					bind:value={newRow.Destination} />
 				<label
 					for="floating_outlined"
-					class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
-					Destination *</label>
+					class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+					{$translation('delivery.input.destination')} *</label>
 			</div>
 
 			<div class="grid grid-cols-2 gap-2">
@@ -291,8 +309,8 @@
 						bind:value={newRow.UnitPrice} />
 					<label
 						for="floating_outlined"
-						class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
-						Unit Price *</label>
+						class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+						{$translation('delivery.input.unitPrice')} *</label>
 				</div>
 
 				<div class="relative">
@@ -304,8 +322,8 @@
 						bind:value={newRow.Quantity} />
 					<label
 						for="floating_outlined"
-						class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
-						Quantity *</label>
+						class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+						{$translation('delivery.input.quantity')} *</label>
 				</div>
 			</div>
 
@@ -314,20 +332,23 @@
 					<button
 						onclick={save}
 						class="pressable mr-0.5 w-full cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-						Save
+						<!-- Save -->
+						{$translation('table.save')}
 					</button>
 
 					<button
 						onclick={cancel}
 						class="pressable ml-0.5 w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600">
-						Cancel
+						<!-- Cancel -->
+						{$translation('table.cancel')}
 					</button>
 				</div>
 			{:else}
 				<button
 					onclick={addRow}
 					class="pressable w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-					Add
+					<!-- Add -->
+					{$translation('table.add')}
 				</button>
 			{/if}
 		</div>
@@ -337,15 +358,15 @@
 		<table class=" w-full {editMode ? ' pointer-events-none ' : ''}">
 			<thead>
 				<tr class="bg-gray-100">
-					<th class="p-2 text-left">Date</th>
-					<th class="p-2 text-left">Client</th>
-					<th class="p-2 text-left">Chauffeur</th>
-					<th class="p-2 text-left">Source</th>
-					<th class="p-2 text-left">Destination</th>
-					<th class="p-2 text-left">Price</th>
-					<th class="p-2 text-left">Qty</th>
-					<th class="p-2 text-left">Total</th>
-					<th class="no-print p-2 text-left">Actions</th>
+					<th class="p-2 text-left">{$translation('delivery.table.date')}</th>
+					<th class="p-2 text-left">{$translation('delivery.table.client')}</th>
+					<th class="p-2 text-left">{$translation('delivery.table.driver')}</th>
+					<th class="p-2 text-left">{$translation('delivery.table.source')}</th>
+					<th class="p-2 text-left">{$translation('delivery.table.destination')}</th>
+					<th class="p-2 text-left">{$translation('delivery.table.price')}</th>
+					<th class="p-2 text-left">{$translation('delivery.table.quantity')}</th>
+					<th class="p-2 text-left">{$translation('delivery.table.total')}</th>
+					<th class="no-print p-2 text-left">{$translation('delivery.table.actions')}</th>
 				</tr>
 			</thead>
 			<tbody>

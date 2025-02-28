@@ -4,6 +4,7 @@
 	import { type AchatRow, type Action } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
 	import { onMount } from 'svelte';
+	import { translation } from '$lib/i18n';
 
 	let selectedCompany = 'Cnh';
 	const companies = ['Cnh', 'Goweil', 'General'];
@@ -115,9 +116,11 @@
 
 <div class="rounded bg-white p-6 shadow">
 	<div class="flex justify-between">
-		<h1 class="mb-4 text-2xl font-bold">Achats</h1>
+		<h1 class="mb-4 text-2xl font-bold">{$translation('navbar.procurements')}</h1>
 
-		<p class="no-print text-xs">(fields that have * are mandatory)</p>
+		<p class="no-print text-xs">
+			({$translation('page.mandatory')})
+		</p>
 	</div>
 
 	<div class=" mb-4 flex space-x-4">
@@ -133,6 +136,14 @@
 		{/each}
 	</div>
 
+	<!-- 
+	
+	'purchases.input.article': 'Article',
+		'purchases.input.price': 'Price',
+		'purchases.input.quantity': 'Quantity',
+
+
+	-->
 	<div class="no-print mb-4 grid grid-cols-4 gap-4">
 		<div class="relative">
 			<input
@@ -143,8 +154,8 @@
 				bind:value={newRow.article} />
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Article *</label>
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+				{$translation('purchases.input.article')} *</label>
 		</div>
 
 		<div class="relative">
@@ -156,8 +167,8 @@
 				bind:value={newRow.prix} />
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Prix *</label>
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+				{$translation('purchases.input.price')} *</label>
 		</div>
 
 		<div class="relative">
@@ -169,8 +180,8 @@
 				bind:value={newRow.quantity} />
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Quantity *</label>
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500">
+				{$translation('purchases.input.quantity')} *</label>
 		</div>
 
 		{#if editMode}
@@ -178,20 +189,20 @@
 				<button
 					onclick={save}
 					class="pressable mr-0.5 w-full cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-					Save
+					{$translation('table.save')}
 				</button>
 
 				<button
 					onclick={cancel}
 					class="pressable ml-0.5 w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600">
-					Cancel
+					{$translation('table.cancel')}
 				</button>
 			</div>
 		{:else}
 			<button
 				onclick={addRow}
 				class="pressable cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-				Add
+				{$translation('table.add')}
 			</button>
 		{/if}
 	</div>
@@ -202,11 +213,11 @@
 		<table class="w-full {editMode ? 'pointer-events-none ' : ''}">
 			<thead>
 				<tr class="bg-gray-100">
-					<th class="p-2 text-left">Article</th>
-					<th class="p-2 text-left">Prix</th>
-					<th class="p-2 text-left">Quantity</th>
-					<th class="p-2 text-left">Total</th>
-					<th class="no-print p-2 text-left">Actions</th>
+					<th class="p-2 text-left">{$translation('purchases.table.article')}</th>
+					<th class="p-2 text-left">{$translation('purchases.table.price')}</th>
+					<th class="p-2 text-left">{$translation('purchases.table.quantity')}</th>
+					<th class="p-2 text-left">{$translation('purchases.table.total')}</th>
+					<th class="no-print p-2 text-left">{$translation('purchases.table.action')}</th>
 				</tr>
 			</thead>
 			<tbody>

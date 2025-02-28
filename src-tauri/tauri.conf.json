@@ -1,7 +1,7 @@
 {
 	"$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
 	"productName": "CropMgmt",
-	"version": "0.0.1",
+	"version": "0.0.0",
 
 	"identifier": "com.tauri.app",
 	"build": {
@@ -39,7 +39,7 @@
 	"plugins": {
 		"updater": {
 			"windows": {
-				"installMode": "basicUi"
+				"installMode": "passive"
 			},
 			"endpoints": [
 				"https://gist.githubusercontent.com/karim-daman/33c30036b257a52b1716eea5c6306633/raw/latest.json"

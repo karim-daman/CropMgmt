@@ -13,7 +13,13 @@
 	import UndoModal from './undoModal.svelte';
 
 	let stats: any = [];
-	let titles: string[] = ['achats', 'clients', 'entretiens', 'pointages', 'livraisons'];
+	$: titles = [
+		$translation('navbar.procurements'),
+		$translation('navbar.clients'),
+		$translation('navbar.maintenance'),
+		$translation('navbar.attendance'),
+		$translation('navbar.delivery')
+	];
 	let icons: any = [creditCard, user, wrench, calandar, truck];
 
 	interface Achats {
@@ -34,8 +40,11 @@
 
 	$: historyArray;
 
+	import { checkForUpdates } from '../lib/updateManager';
+
 	onMount(async () => {
 		await initializeAllStores();
+		await checkForUpdates();
 
 		toast.success('Welcome back.', {
 			position: 'top-right'
@@ -43,28 +52,23 @@
 
 		stats = [
 			{
-				title: 'achats',
 				value:
 					(achat?.Cnh?.length || 0) + (achat?.Goweil?.length || 0) + (achat?.General?.length || 0),
 				icon: 'dollar-sign'
 			},
 			{
-				title: 'clients',
 				value: JSON.stringify($clients?.length, null, 2),
 				icon: 'users'
 			},
 			{
-				title: 'entretiens',
 				value: (entretien?.Cnh?.length || 0) + (entretien?.Goweil?.length || 0),
 				icon: 'briefcase'
 			},
 			{
-				title: 'pointages',
 				value: JSON.stringify($pointages?.length, null, 2),
 				icon: 'calandar'
 			},
 			{
-				title: 'livraisons',
 				value: JSON.stringify($livraisons?.length, null, 2),
 				icon: 'truck'
 			}
@@ -93,12 +97,13 @@
 
 		return `${day}/${month}/${year} @ ${hours}:${minutes} ${ampm}`;
 	}
+	import { translation, locale, locales } from '../lib/i18n';
 </script>
 
 <div class=" bg-gray-100">
 	<div class=" px-4 py-6 sm:px-6 lg:px-8">
 		<header class="mb-8 flex items-center justify-between">
-			<h1 class="text-3xl font-bold text-gray-900 select-none">Dashboard</h1>
+			<h1 class="text-3xl font-bold text-gray-900 select-none">{$translation('homepage.title')}</h1>
 		</header>
 
 		<div class=" mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
@@ -171,7 +176,7 @@
 					<h2 class=" text-lg font-medium text-gray-900 select-none">
 						<div
 							class="relative inline-flex items-center rounded bg-indigo-500 px-5 py-1 text-center text-sm font-medium text-white">
-							History
+							{$translation('homepage.history')}
 							<div
 								class="absolute -end-2 -top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-red-500 text-xs font-bold text-white dark:border-gray-900">
 								<p class="text-[9px]">{$history.length}</p>
@@ -188,7 +193,7 @@
 									$history = $history.map((item) => ({ ...item, toggle: false }));
 								}}
 								class="pressable cursor-pointer rounded-sm border bg-blue-200 px-6 hover:bg-blue-500 hover:text-white"
-								>Close All</button>
+								>{$translation('homepage.history.closeAll')}</button>
 						{/if}
 					</div>
 				</div>

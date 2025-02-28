@@ -4,6 +4,7 @@
 	import { type Action, type PointageRow } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
 	import { onMount } from 'svelte';
+	import { translation } from '$lib/i18n';
 
 	let newRow: PointageRow = {
 		ID: Date.now(),
@@ -107,9 +108,20 @@
 
 <div class="rounded bg-white p-6 shadow">
 	<div class="flex justify-between">
-		<h1 class="mb-4 text-2xl font-bold">Pointage</h1>
-		<p class="no-print text-xs">(fields that have * are mandatory)</p>
+		<h1 class="mb-4 text-2xl font-bold">{$translation('navbar.attendance')}</h1>
+		<p class="no-print text-xs">
+			({$translation('page.mandatory')})
+		</p>
 	</div>
+
+	<!-- 
+	
+	
+	'attendance.input.name': 'اسم',
+		'attendance.input.startDate': 'تاريخ البدء',
+		'attendance.input.missedDays': 'الأيام الغياب',
+	
+	-->
 
 	<div class="no-print mb-4 grid grid-cols-4 gap-4">
 		<div class="relative">
@@ -121,8 +133,8 @@
 				bind:value={newRow.name} />
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Name *</label>
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>{$translation('attendance.input.name')} *</label>
 		</div>
 
 		<div class="relative">
@@ -134,8 +146,8 @@
 				bind:value={newRow.startDate} />
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Start Date *</label>
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>{$translation('attendance.input.startDate')} *</label>
 		</div>
 
 		<div class="relative">
@@ -148,8 +160,8 @@
 				bind:value={newRow.missedDays} />
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Missed Days *</label>
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>{$translation('attendance.input.missedDays')} *</label>
 		</div>
 
 		{#if editMode}
@@ -157,20 +169,20 @@
 				<button
 					onclick={save}
 					class="pressable mr-0.5 w-full cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-					Save
+					{$translation('table.save')}
 				</button>
 
 				<button
 					onclick={cancel}
 					class="pressable ml-0.5 w-full cursor-pointer rounded bg-gray-500 px-4 py-2 text-white hover:bg-gray-600">
-					Cancel
+					{$translation('table.cancel')}
 				</button>
 			</div>
 		{:else}
 			<button
 				onclick={addRow}
 				class="pressable cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-				Add
+				{$translation('table.add')}
 			</button>
 		{/if}
 	</div>
@@ -179,11 +191,13 @@
 		<table class="w-full">
 			<thead>
 				<tr class="bg-gray-100">
-					<th class="p-2 text-left">Name</th>
-					<th class="p-2 text-left">Start Date</th>
-					<th class="p-2 text-left">Missed Days</th>
-					<th class="p-2 text-left">Total Days</th>
-					<th class="no-print p-2 text-left">Actions</th>
+					<th class="p-2 text-left"> {$translation('attendance.table.name')} </th>
+					<th class="p-2 text-left"> {$translation('attendance.table.startDate')} </th>
+					<th class="p-2 text-left"> {$translation('attendance.table.missedDays')} </th>
+					<th class="p-2 text-left"> {$translation('attendance.table.totalDays')} </th>
+					<th class="no-print p-2 text-left">
+						{$translation('attendance.table.actions')}
+					</th>
 				</tr>
 			</thead>
 			<tbody>

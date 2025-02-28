@@ -26,6 +26,8 @@
 		checking = true;
 		error = null;
 
+		// console.log(import.meta.env.VITE_API_TOKEN);
+
 		try {
 			console.log('Checking for updates...');
 			update = await check();
@@ -81,10 +83,6 @@
 
 			console.log('Update installed successfully');
 			installing = true;
-
-			// Small delay to ensure user sees the success message
-			// await new Promise((resolve) => setTimeout(resolve, 1000));
-
 			console.log('Relaunching application...');
 			await relaunch();
 		} catch (err) {

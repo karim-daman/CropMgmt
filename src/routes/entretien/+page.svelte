@@ -4,6 +4,7 @@
 	import { type Action, type Card } from '../../lib/types';
 	import DeleteModal from './deleteModal.svelte';
 	import { onMount } from 'svelte';
+	import { translation } from '$lib/i18n';
 
 	let selectedCompany: 'Cnh' | 'Goweil' = 'Cnh'; // Explicitly type selectedCompany
 	const companies = ['Cnh', 'Goweil'];
@@ -124,8 +125,10 @@
 
 <div class="rounded bg-white p-6 shadow">
 	<div class="flex justify-between">
-		<h1 class="mb-4 text-2xl font-bold">Entretien</h1>
-		<p class="no-print text-xs">(fields that have * are mandatory)</p>
+		<h1 class="mb-4 text-2xl font-bold">{$translation('navbar.maintenance')}</h1>
+		<p class="no-print text-xs">
+			({$translation('page.mandatory')})
+		</p>
 	</div>
 
 	<div class="mb-4">
@@ -153,8 +156,8 @@
 				bind:value={newCard.dueDate} />
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Due Date *</label>
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>{$translation('maintenance.input.dueDate')} *</label>
 		</div>
 
 		<div class="relative">
@@ -169,8 +172,8 @@
 
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Status
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>{$translation('maintenance.input.status')}
 			</label>
 		</div>
 
@@ -183,14 +186,14 @@
 				bind:value={newCard.description} />
 			<label
 				for="floating_outlined"
-				class="pointer-events-none absolute start-1 top-2 z-10 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
-				>Description *</label>
+				class="pointer-events-none absolute start-1 top-2 origin-[0] -translate-y-4 scale-75 transform bg-white px-2 text-sm text-gray-500 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4 dark:bg-gray-900 dark:text-gray-400 peer-focus:dark:text-blue-500"
+				>{$translation('maintenance.input.description')} *</label>
 		</div>
 
 		<button
 			on:click={addCard}
 			class=" pressable rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-			Add
+			{$translation('table.add')}
 		</button>
 	</div>
 
