@@ -3,7 +3,6 @@
 	import { settings } from '../components/icons';
 	import About from './about.svelte';
 	import Contact from './contact.svelte';
-	import LanguageSelect from './languageSelect.svelte';
 	let isOpen: Boolean = false;
 
 	let options: string[] = ['About', 'Contact'];
@@ -11,8 +10,8 @@
 
 <div class="relative inline-block text-left">
 	<div>
-		<!-- svelte-ignore a11y_consider_explicit_label -->
 		<button
+			aria-label="btn"
 			use:clickOutside
 			on:outsideclick={() => {
 				isOpen = false;
@@ -44,8 +43,8 @@
 	<div
 		class="absolute right-0 mt-2 overflow-hidden transition-all duration-100
 		{isOpen
-			? 'h-auto '
-			: 'h-0 outline-hidden'} z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md border border-black/5 bg-white shadow-lg"
+			? 'h-auto outline outline-gray-200'
+			: 'h-0 outline-hidden'} z-10 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg"
 		role="menu"
 		aria-orientation="vertical"
 		aria-labelledby="menu-button"
@@ -57,15 +56,14 @@
 				<Contact />
 			{:else}
 				<div class="cursor-pointer py-1" role="none">
-					<a
+					<button
 						on:click={() => {
 							isOpen = false;
 						}}
-						href="#"
 						class="pressable block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:outline-hidden"
 						role="menuitem"
 						tabindex="-1"
-						id="menu-item-0">{option}</a>
+						id="menu-item-0">{option}</button>
 				</div>
 			{/if}
 		{/each}

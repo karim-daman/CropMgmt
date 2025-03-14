@@ -30,17 +30,17 @@
 		error = null;
 
 		try {
-			console.log('Checking for updates...');
+			// console.log('Checking for updates...');
 			update = await check();
 
 			if (update) {
-				console.log(`Update found: v${update.version} (${update.date})`);
+				// console.log(`Update found: v${update.version} (${update.date})`);
 				updateInfo = update;
 			} else {
-				console.log('No updates available');
+				// console.log('No updates available');
 			}
 		} catch (err: any) {
-			console.error('Error checking for updates:', err);
+			// console.error('Error checking for updates:', err);
 			error = `Failed to check for updates: ${err.message}`;
 		} finally {
 			checking = false;
@@ -50,7 +50,7 @@
 	// Function to handle the update installation
 	async function installUpdate() {
 		if (!update) {
-			console.error('No update available to install');
+			// console.error('No update available to install');
 			return;
 		}
 
@@ -74,7 +74,7 @@
 
 			await relaunch();
 		} catch (err: any) {
-			console.error('Error during update process:', err);
+			// console.error('Error during update process:', err);
 			error = `Update failed: ${err}`;
 			downloading = false;
 			installing = false;
@@ -83,10 +83,10 @@
 </script>
 
 <div class="py-1" role="none">
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<a
 		on:click={() => (hidden = !hidden)}
-		href="#"
-		class="pressable relative block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+		class="pressable relative block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
 		role="menuitem"
 		tabindex="-1"
 		id="menu-item-0">
@@ -103,7 +103,7 @@
 <div
 	id="popup-modal"
 	tabindex="-1"
-	class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm transition-opacity {hidden
+	class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm backdrop-brightness-50 transition-opacity {hidden
 		? 'pointer-events-none opacity-0'
 		: 'opacity-100'}">
 	<div class="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
@@ -177,8 +177,20 @@
 				{#if updateInfo}
 					<button
 						on:click={installUpdate}
-						class="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+						class="flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
 						Install Update
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="ml-2 size-5">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+						</svg>
 					</button>
 				{:else}
 					<button
@@ -190,7 +202,7 @@
 
 				<button
 					on:click={() => (hidden = true)}
-					class=" w-full rounded-md bg-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-400 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700">
+					class=" w-full rounded-md bg-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-400 hover:text-white dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700">
 					Cancel
 				</button>
 			</div>

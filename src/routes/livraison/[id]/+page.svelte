@@ -101,17 +101,17 @@
 			<tr>
 				<td class="border-t p-2">Botte Ensilage</td>
 				<td class="border-t p-2 text-right"
-					>${findLivraisonById(page.params.id)?.UnitPrice.toFixed(2)}</td>
+					>دج {findLivraisonById(page.params.id)?.UnitPrice.toFixed(2)}</td>
 				<td class="border-t p-2 text-right">{findLivraisonById(page.params.id)?.Quantity}</td>
 				<td class="border-t p-2 text-right"
-					>${findLivraisonById(page.params.id)?.Total.toFixed(2)}</td>
+					>دج {findLivraisonById(page.params.id)?.Total.toFixed(2)}</td>
 			</tr>
 		</tbody>
 	</table>
 
 	<div class="text-right">
 		<p class="rounded-sm border p-2 text-xl font-semibold">
-			Total: ${findLivraisonById(page.params.id)?.Total.toFixed(2)}
+			Total: دج {findLivraisonById(page.params.id)?.Total.toFixed(2)}
 		</p>
 	</div>
 </div>

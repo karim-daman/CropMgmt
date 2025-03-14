@@ -261,8 +261,8 @@
 															stroke-width="1.5"
 															stroke="currentColor"
 															class="size-5 transition-all {item.toggle == false
-																? ''
-																: 'rotate-180'} ">
+																? 'rotate-180'
+																: ''} ">
 															<path
 																stroke-linecap="round"
 																stroke-linejoin="round"

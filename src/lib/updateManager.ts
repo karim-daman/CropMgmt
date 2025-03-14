@@ -30,18 +30,18 @@ export async function checkForUpdates(): Promise<UpdateCheckResult> {
 	try {
 		currentVersion = await getVersion();
 	} catch (err: any) {
-		console.error('Failed to get app version:', err);
+		// console.error('Failed to get app version:', err);
 		throw new Error(`Failed to get app version: ${err.message}`);
 	}
 
 	// Check for updates
 	try {
-		console.log('Checking for updates...');
+		// console.log('Checking for updates...');
 		const update = await check();
 
 		if (update) {
-			console.log(`Update found: v${update.version} (${update.date})`);
-			console.log('Release notes:', update.body);
+			// console.log(`Update found: v${update.version} (${update.date})`);
+			// console.log('Release notes:', update.body);
 
 			return {
 				currentVersion,
@@ -58,7 +58,7 @@ export async function checkForUpdates(): Promise<UpdateCheckResult> {
 			};
 		}
 	} catch (err: any) {
-		console.error('Error checking for updates:', err);
+		// console.error('Error checking for updates:', err);
 		throw new Error(`Failed to check for updates: ${err.message}`);
 	}
 }
@@ -72,7 +72,7 @@ export async function isUpdateAvailable(): Promise<any> {
 		const result = await checkForUpdates();
 		return result;
 	} catch (err) {
-		console.error('Error checking for updates:', err);
+		// console.error('Error checking for updates:', err);
 		throw err;
 	}
 }

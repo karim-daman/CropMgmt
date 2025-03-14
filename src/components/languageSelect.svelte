@@ -1,31 +1,31 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
-	import { translation, locale, locales } from '../lib/i18n';
-	// import { clickOutside } from "../lib/clickOutside";
+	import { locale, locales } from '../lib/i18n';
 	import toast from 'svelte-5-french-toast';
 	import { clickOutside } from '$lib/clickOuside';
 
-	let langs = [];
-	let selectedLang = 'en';
+	let langs: string[] = [];
+	let selectedLang: string; // No need to initialize here; it will be set in onMount
 	let isOpen = false;
 
+	// Initialize selectedLang with the value from the locale store
 	onMount(() => {
 		langs = locales;
-		selectedLang = langs[0];
+
+		// Set selectedLang to the current value of the locale store
+		selectedLang = $locale;
+
+		// Subscribe to changes in the locale store to keep selectedLang in sync
+		const unsubscribe = locale.subscribe((value) => {
+			selectedLang = value;
+		});
+
+		// Cleanup the subscription when the component is destroyed
+		return () => unsubscribe();
 	});
 
 	function handleToggle() {
 		isOpen = !isOpen;
-	}
-
-	function clickOut() {
-		isOpen = false;
-	}
-
-	function selectLang(lang) {
-		console.log(lang);
-		selectedLang = lang;
-		$locale = lang;
 	}
 </script>
 
@@ -57,9 +57,8 @@
 		{#each langs as l}
 			<button
 				on:click={() => {
-					console.log(l);
-					selectedLang = l;
-					$locale = l;
+					selectedLang = l; // Update selectedLang
+					$locale = l; // Update the locale store (which will also update localStorage)
 					toast.success('Language set to ' + l, {
 						position: 'top-right'
 					});

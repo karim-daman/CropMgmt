@@ -17,6 +17,11 @@ export const livraisons = writable<LivraisonRow[]>([]);
 export const pointages = writable<PointageRow[]>([]);
 export const history = writable<Action[]>([]);
 
+export const license = writable<{ licenseKey: string; requestId: string }>({
+	licenseKey: '',
+	requestId: ''
+});
+
 async function ensureDataFolder() {
 	const dataFolderExist = await exists('data', { baseDir: BaseDirectory.Desktop });
 
@@ -26,19 +31,20 @@ async function ensureDataFolder() {
 	}
 
 	const files = [
-		'achats.txt',
-		'clients.txt',
-		'entretiens.txt',
-		'livraisons.txt',
-		'pointages.txt',
-		'history.txt'
+		{ name: 'achats.txt', default: '[]' },
+		{ name: 'clients.txt', default: '[]' },
+		{ name: 'entretiens.txt', default: '[]' },
+		{ name: 'livraisons.txt', default: '[]' },
+		{ name: 'pointages.txt', default: '[]' },
+		{ name: 'history.txt', default: '[]' },
+		{ name: 'license.txt', default: '{}' } // Default to empty object for license
 	];
 
 	await Promise.all(
 		files.map(async (file) => {
-			const filePath = `data/${file}`;
+			const filePath = `data/${file.name}`;
 			if (!(await exists(filePath, { baseDir: BaseDirectory.Desktop }))) {
-				await writeTextFile(filePath, '[]', { baseDir: BaseDirectory.Desktop });
+				await writeTextFile(filePath, file.default, { baseDir: BaseDirectory.Desktop });
 			}
 		})
 	);
@@ -55,23 +61,31 @@ async function saveToFile(data: any, filename: string) {
 	}
 }
 
-async function loadFromFile<T>(filename: string): Promise<T[]> {
+async function loadFromFile<T>(filename: string): Promise<T> {
 	try {
 		const content = await readTextFile(`data/${filename}.txt`, { baseDir: BaseDirectory.Desktop });
-		return JSON.parse(content) as T[];
+
+		// Check if content is empty or just whitespace
+		if (!content.trim()) {
+			// Return empty object for license, empty array for others
+			return filename === 'license' ? ({} as T) : ([] as unknown as T);
+		}
+
+		return JSON.parse(content) as T;
 	} catch (error) {
 		console.error(`Error loading ${filename}:`, error);
-		return [];
+		// Return empty object for license, empty array for others
+		return filename === 'license' ? ({} as T) : ([] as unknown as T);
 	}
 }
 
 function debounceSave<T>(filename: string) {
-	return debounce(async (data: T[]) => {
+	return debounce(async (data: T) => {
 		await saveToFile(data, filename);
 	}, 500);
 }
 
-async function initializeStore<T>(store: any, filename: string, setter: (data: T[]) => void) {
+async function initializeStore<T>(store: any, filename: string, setter: (data: T) => void) {
 	try {
 		const data = await loadFromFile<T>(filename);
 		setter(data);
@@ -94,7 +108,8 @@ export async function initializeAllStores() {
 			initializeEntretiensStore(),
 			initializeLivraisonsStore(),
 			initializePointagesStore(),
-			initializeHistoryStore()
+			initializeHistoryStore(),
+			initializeLicenseStore()
 		]);
 	} catch (error) {
 		console.error('Error initializing stores:', error);
@@ -119,4 +134,8 @@ export async function initializePointagesStore() {
 }
 export async function initializeHistoryStore() {
 	await initializeStore(history, 'history', history.set);
+}
+
+export async function initializeLicenseStore() {
+	await initializeStore(license, 'license', license.set);
 }
